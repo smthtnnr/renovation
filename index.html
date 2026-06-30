@@ -178,7 +178,7 @@ const SYSTEMS = [
       {id:"tearoff", label:"Tearoff", price:750, q:"roofSquares"},
       {id:"layover", label:"Layover", price:500, q:"roofSquares"}]}],
    addons:[{id:"cert", label:"Roof cert", price:2500, q:"flat", def:false}]},
- {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:".InspectHvac", cert:"CertHvac",
+ {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:"InspectHvac", cert:"CertHvac",
    picks:[{id:"hvac", label:"HVAC scope", none:true, prompt:true, opts:[
       {id:"service", label:"Service", price:2000, q:"flat"},
       {id:"cond2", label:"2 ton condenser", price:3000, q:"flat"},
@@ -188,25 +188,25 @@ const SYSTEMS = [
       {id:"duct", label:"Duct work", price:2500, q:"flat"},
       {id:"allnew", label:"All new", price:10000, q:"flat"}]}]},
  {sec:"Major Systems", name:"Electrical Panel / System", amt:"MajAmountElectricalPanel", cmt:"MajCmtElectricalPanel", ins:"InspectElectricalPanel", cert:"CertElectricalPanel", lineItems:true},
- {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:".InspectWaterHeater", cert:"CertWaterHeater",
+ {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:"InspectWaterHeater", cert:"CertWaterHeater",
    addons:[{id:"replace", label:"Replace", price:1500, q:"flat", def:true}]},
- {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:".InspectWindow", cert:"CertWindow",
+ {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:"InspectWindow", cert:"CertWindow",
    addons:[{id:"win", label:"Windows", price:750, q:"windows", def:false},
            {id:"slider", label:"Sliders", price:1500, q:"sliders", def:false}]},
- {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:".InspectPlumbing", cert:"CertPlumbing", lineItems:true},
- {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:".InspectFoundation", cert:"CertFoundation", manual:true},
+ {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:"InspectPlumbing", cert:"CertPlumbing", lineItems:true},
+ {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"InspectFoundation", cert:"CertFoundation", manual:true},
  {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", manual:true},
- {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:".InspectChimney", cert:"CertChimney",
+ {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:"InspectChimney", cert:"CertChimney",
    addons:[{id:"paint", label:"Paint", price:500, q:"flat", def:true},
            {id:"tile", label:"Tile", price:2000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:".InspectCrawlspace", cert:"CertCrawlspace", manual:true},
- {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:".InspectTermite", cert:"CertTermite", manual:true},
- {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:".InspectPool", cert:"CertPool",
+ {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"InspectCrawlspace", cert:"CertCrawlspace", manual:true},
+ {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"InspectTermite", cert:"CertTermite", manual:true},
+ {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"InspectPool", cert:"CertPool",
    addons:[{id:"replaster", label:"Replaster", price:10000, q:"flat", def:false},
            {id:"equip", label:"New equipment", price:8000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:".InspectSpa", cert:"CertSpa", manual:true},
- {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:".InspectWell", cert:"CertWell", manual:true},
- {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:".InspectMisc", cert:"CertMisc", lineItems:true},
+ {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"InspectSpa", cert:"CertSpa", manual:true},
+ {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"InspectWell", cert:"CertWell", manual:true},
+ {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"InspectMisc", cert:"CertMisc", lineItems:true},
 
  // ===== GENERAL REHAB =====
  {sec:"General Rehab", name:"Bathroom", amt:"GenAmountBathroom", cmt:"GenCmtBathroom",
@@ -253,7 +253,7 @@ const SYSTEMS = [
            {id:"texture", label:"Texture", price:1, q:"sqft", def:false},
            {id:"popcorn", label:"Popcorn ceiling scrape", price:1, q:"sqft", def:false}]},
  {sec:"General Rehab", name:"Plumbing Fixtures", amt:"GenAmountPlumbingFixture", cmt:"GenCmtPlumbingFixture", lineItems:true},
- {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:".GenCmtMisc", lineItems:true},
+ {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"GenCmtMisc", lineItems:true},
 
  // ===== FINISHES =====
  {sec:"Finishes", name:"Appliances", amt:"FinAmountAppliance", cmt:"FinCmtAppliance",
@@ -274,7 +274,7 @@ const SYSTEMS = [
       {id:"high", label:"High end", price:6500, q:"flat", def:true},
       {id:"cheap", label:"Cheap", price:3500, q:"flat"},
       {id:"estage", label:"E-stage", price:550, q:"flat"}]}]},
- {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:".FinCmtMisc", lineItems:true},
+ {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"FinCmtMisc", lineItems:true},
 ];
 
 // ---- per-system editable state ----
