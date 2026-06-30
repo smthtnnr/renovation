@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#234b5c"/>
+  <g fill="none" stroke="#ffffff" stroke-width="26" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M128 248 L256 140 L384 248"/>
+    <path d="M160 232 V372 H352 V232"/>
+  </g>
+  <text x="256" y="345" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="120" font-weight="800" fill="#ffffff" text-anchor="middle">$</text>
+</svg>

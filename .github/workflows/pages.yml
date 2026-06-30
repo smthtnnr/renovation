@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+# Deploys the app to GitHub Pages when changes land on main.
+# Only the app files are published — the raw pricing sheet (docs/) and the
+# standalone Budget_Template.pdf are intentionally excluded.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Assemble site (app files only)
+        run: |
+          mkdir -p _site
+          cp index.html manifest.webmanifest sw.js _site/
+          cp -r vendor icons _site/
+          # Stamp a unique cache name per release so updates always go live.
+          sed -i "s/__BUILD_ID__/${GITHUB_SHA}/g" _site/sw.js
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

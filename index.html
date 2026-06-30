@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Reno Budget Estimator — Wedgewood</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<meta name="description" content="Wedgewood renovation budget estimator — fills the standard budget PDF.">
+<meta name="theme-color" content="#234b5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Reno Budget">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<!-- pdf-lib is bundled locally (vendor/) so PDF export works fully offline -->
+<script src="vendor/pdf-lib.min.js"></script>
 <style>
   :root{
     --bg:#eef0f2; --card:#ffffff; --ink:#15191e; --muted:#6b7480;
@@ -70,7 +80,7 @@
   .rcout button:hover{filter:brightness(1.1)}
   .rcout button:active{transform:translateY(1px)}
   /* sticky total bar */
-  .bar{position:fixed;left:0;right:0;bottom:48px;background:var(--accent);color:#fff;border-top:3px solid var(--accent2);box-shadow:0 -6px 24px rgba(0,0,0,.18);z-index:50}
+  .bar{position:fixed;left:0;right:0;bottom:0;padding-bottom:env(safe-area-inset-bottom);background:var(--accent);color:#fff;border-top:3px solid var(--accent2);box-shadow:0 -6px 24px rgba(0,0,0,.18);z-index:50}
   .barin{max-width:920px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .subs{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;opacity:.85}
   .subs b{display:block;font-family:var(--mono);font-size:14px;font-weight:600;opacity:1;margin-top:1px}
@@ -84,6 +94,16 @@
   button.act:active{transform:translateY(1px)}
   .toast{position:fixed;bottom:132px;left:50%;transform:translateX(-50%);background:#15191e;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:60;pointer-events:none}
   .toast.show{opacity:1}
+  .region{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+  .region select{font-weight:600;color:var(--accent)}
+  .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;margin-top:4px;display:none}
+  .installbtn.show{display:inline-block}
+  .installhint{display:none;align-items:center;gap:10px;background:#eef0f7;border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--ink)}
+  .installhint.show{display:flex}
+  .installhint .ih-ic{flex:none;font-size:15px}
+  .installhint .ih-text{flex:1;line-height:1.4}
+  .installhint b{color:var(--accent)}
+  .installhint .ih-x{flex:none;background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 2px;line-height:1}
   @media(max-width:560px){.grand .val{font-size:21px}.subs{display:none}.sysname{flex-basis:100%}}
 </style>
 </head>
@@ -91,7 +111,18 @@
 <div class="wrap">
   <header class="top">
     <div class="brand">WEDGEWOOD<small>Renovation Budget Estimator</small></div>
+    <div class="region">
+      <label class="fld" for="regionSel">Pricing region</label>
+      <select id="regionSel"></select>
+      <button type="button" id="installBtn" class="installbtn">⬇ Install app</button>
+    </div>
   </header>
+
+  <div id="installHint" class="installhint">
+    <span class="ih-ic">📲</span>
+    <span class="ih-text"></span>
+    <button type="button" class="ih-x" title="Dismiss" aria-label="Dismiss">&times;</button>
+  </div>
 
   <div class="card">
     <h2>Property &amp; Quantities</h2>
@@ -146,6 +177,7 @@ const PROPS = [
   {k:"propId", label:"Property ID", type:"text"},
   {k:"sqft", label:"Living sq ft", type:"num"},
   {k:"beds", label:"Bedrooms", type:"num"},
+  {k:"baths", label:"Bathrooms", type:"num"},
   {k:"intDoors", label:"Interior doors", type:"num"},
   {k:"frontDoors", label:"Front doors", type:"num", def:1},
   {k:"windows", label:"Windows", type:"num"},
@@ -154,106 +186,117 @@ const PROPS = [
   {k:"garageDoors", label:"Garage doors", type:"num"},
   {k:"garages", label:"Garages", type:"num"},
 ];
-const prop = {}; PROPS.forEach(p=> prop[p.k] = p.def!=null?p.def:(p.type==="num"?0:""));
+const prop = {}; PROPS.forEach(p=> prop[p.k] = p.def!=null?p.def:""); // blank by default (placeholder shows 0)
 
 // qty resolver
 function qty(key){
   if(key==="flat") return 1;
+  if(key==="bedsBaths") return qty("beds")+qty("baths");
   const v = parseFloat(prop[key]); return isNaN(v)?0:v;
 }
 const UNIT_LABEL = {
-  flat:"flat", sqft:"/sf", beds:"/bedroom", baths:"/bath", intDoors:"/int door",
+  flat:"flat", sqft:"/sf", beds:"/bedroom", baths:"/bath", bedsBaths:"/bed+bath", intDoors:"/int door",
   frontDoors:"/front door", windows:"/window", sliders:"/slider",
   roofSquares:"/sq", garageDoors:"/door", garages:"/garage", fenceLF:"/ln ft"
 };
 
 // ---- pricing model (from BAY pricing sheet, Sheet2) ----
 // each system maps to ONE pdf amount field; options roll up into it.
-const SYSTEMS = [
+//
+// All pricing lives in REGIONS. To add a region later: copy the whole
+// `bayArea` block below, give it a new key + label, edit the prices, and
+// the region dropdown at the top of the page picks it up automatically.
+// (See README.md → "Updating prices / adding a region".)
+const REGIONS = {
+ bayArea: {
+  label: "Bay Area",
+  systems: [
  // ===== MAJOR SYSTEMS =====
- {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", manual:true},
- {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", manual:true},
+ {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", lineItems:true},
+ {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", lineItems:true,
+   addons:[{id:"pos", label:"POS Requirement", price:15000, q:"flat", def:false}]},
  {sec:"Major Systems", name:"Roof", amt:"MajAmountRoof", cmt:"MajCmtRoof", ins:"InspectRoof", cert:"CertRoof",
    picks:[{id:"roofType", label:"Roof work", none:true, opts:[
       {id:"tearoff", label:"Tearoff", price:750, q:"roofSquares"},
       {id:"layover", label:"Layover", price:500, q:"roofSquares"}]}],
-   addons:[{id:"cert", label:"Roof cert", price:2500, q:"flat", def:false}]},
- {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:".InspectHvac", cert:"CertHvac",
+   addons:[{id:"cert", label:"Roof cert", price:2000, q:"flat", def:false}]},
+ {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:"undefined.InspectHvac", cert:"CertHvac",
    picks:[{id:"hvac", label:"HVAC scope", none:true, prompt:true, opts:[
       {id:"service", label:"Service", price:2000, q:"flat"},
-      {id:"cond2", label:"2 ton condenser", price:3000, q:"flat"},
-      {id:"cond3", label:"3 ton condenser", price:3500, q:"flat"},
+      {id:"cond2", label:"2 ton condenser", price:3500, q:"flat"},
+      {id:"cond3", label:"3 ton condenser", price:4000, q:"flat"},
       {id:"furnace", label:"Furnace", price:3500, q:"flat"},
-      {id:"wall", label:"Wall heater", price:2500, q:"flat"},
+      {id:"wall", label:"Wall heater", price:2000, q:"flat"},
       {id:"duct", label:"Duct work", price:2500, q:"flat"},
       {id:"allnew", label:"All new", price:10000, q:"flat"}]}]},
  {sec:"Major Systems", name:"Electrical Panel / System", amt:"MajAmountElectricalPanel", cmt:"MajCmtElectricalPanel", ins:"InspectElectricalPanel", cert:"CertElectricalPanel", lineItems:true},
- {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:".InspectWaterHeater", cert:"CertWaterHeater",
+ {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:"undefined.InspectWaterHeater", cert:"CertWaterHeater",
    addons:[{id:"replace", label:"Replace", price:1500, q:"flat", def:true}]},
- {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:".InspectWindow", cert:"CertWindow",
+ {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:"undefined.InspectWindow", cert:"CertWindow",
    addons:[{id:"win", label:"Windows", price:750, q:"windows", def:false},
            {id:"slider", label:"Sliders", price:1500, q:"sliders", def:false}]},
- {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:".InspectPlumbing", cert:"CertPlumbing", lineItems:true},
- {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:".InspectFoundation", cert:"CertFoundation", manual:true},
- {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", manual:true},
- {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:".InspectChimney", cert:"CertChimney",
+ {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:"undefined.InspectPlumbing", cert:"CertPlumbing", lineItems:true},
+ {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"undefined.InspectFoundation", cert:"CertFoundation", lineItems:true},
+ {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", lineItems:true},
+ {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:"undefined.InspectChimney", cert:"CertChimney",
    addons:[{id:"paint", label:"Paint", price:500, q:"flat", def:true},
            {id:"tile", label:"Tile", price:2000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:".InspectCrawlspace", cert:"CertCrawlspace", manual:true},
- {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:".InspectTermite", cert:"CertTermite", manual:true},
- {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:".InspectPool", cert:"CertPool",
+ {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"undefined.InspectCrawlspace", cert:"CertCrawlspace", lineItems:true},
+ {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"undefined.InspectTermite", cert:"CertTermite", lineItems:true},
+ {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"undefined.InspectPool", cert:"CertPool",
    addons:[{id:"replaster", label:"Replaster", price:10000, q:"flat", def:false},
-           {id:"equip", label:"New equipment", price:8000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:".InspectSpa", cert:"CertSpa", manual:true},
- {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:".InspectWell", cert:"CertWell", manual:true},
- {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:".InspectMisc", cert:"CertMisc", lineItems:true},
+           {id:"equip", label:"New equipment", price:8000, q:"flat", def:false},
+           {id:"startup", label:"Startup", price:1000, q:"flat", def:false}]},
+ {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"undefined.InspectSpa", cert:"CertSpa", lineItems:true},
+ {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"undefined.InspectWell", cert:"CertWell", lineItems:true},
+ {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"undefined.InspectMisc", cert:"CertMisc", lineItems:true},
 
  // ===== GENERAL REHAB =====
  {sec:"General Rehab", name:"Bathroom", amt:"GenAmountBathroom", cmt:"GenCmtBathroom",
    addons:[{id:"full", label:"Full reno", price:5500, q:"count", def:true, inline:true, qlabel:"baths"},
+           {id:"custom", label:"Custom bathroom", price:7500, q:"count", def:false, inline:true, qlabel:"baths"},
            {id:"strategic", label:"Strategic reno", price:2500, q:"count", def:false, inline:true, qlabel:"baths"},
            {id:"mirrors", label:"Mirrors & lights", price:500, q:"count", def:false, inline:true, qlabel:"baths"}]},
  {sec:"General Rehab", name:"Doors / Hardware", amt:"GenAmountDoor", cmt:"GenCmtDoor",
    addons:[{id:"hardware", label:"Change all hardware", price:50, q:"intDoors", def:true},
            {id:"paintd", label:"Paint doors", price:50, q:"intDoors", def:true},
            {id:"replace", label:"Replace doors", price:250, q:"intDoors", def:false},
-           {id:"front", label:"Front door", price:1000, q:"frontDoors", def:true}]},
+           {id:"front", label:"Front door", price:1000, q:"frontDoors", def:true},
+           {id:"mirror", label:"Mirrored sliders", price:500, q:"beds", def:true}]},
  {sec:"General Rehab", name:"Electrical Fixtures", amt:"GenAmountElectricalFixture", cmt:"GenCmtElectricalFixture",
-   addons:[{id:"all", label:"Change all in house", price:1500, q:"flat", def:true},
-           {id:"bedlight", label:"Add bedroom lighting", price:150, q:"beds", def:true},
-           {id:"extlight", label:"Exterior lighting", price:1500, q:"flat", def:false}]},
+   addons:[{id:"all", label:"Change all in house", price:2500, q:"flat", def:true},
+           {id:"bedlight", label:"Add bedroom/bathroom lighting", price:250, q:"bedsBaths", def:true},
+           {id:"extlight", label:"Exterior lighting", price:2000, q:"flat", def:true}]},
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
  {sec:"General Rehab", name:"Flooring", amt:"GenAmountFlooring", cmt:"GenCmtFlooring",
-   picks:[{id:"floor", label:"Flooring", none:true, opts:[
-      {id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true},
-      {id:"eng", label:"Engineered / base", price:10, q:"sqft"}]}]},
+   addons:[{id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true, inline:true, qlabel:"sqft"},
+           {id:"carpet", label:"Carpet", price:3, q:"sqft", def:false, inline:true, qlabel:"sqft"},
+           {id:"eng", label:"Engineered / base", price:10, q:"sqft", def:false, inline:true, qlabel:"sqft"}]},
  {sec:"General Rehab", name:"Framing / Drywall", amt:"GenAmountFraming", cmt:"GenCmtFraming", lineItems:true},
  {sec:"General Rehab", name:"Garage", amt:"GenAmountGarage", cmt:"GenCmtGarage",
    addons:[{id:"single", label:"Single car door", price:1000, q:"garageDoors", def:false},
            {id:"double", label:"Two car door", price:1500, q:"garageDoors", def:false},
-           {id:"motor", label:"New motor", price:700, q:"garages", def:false}]},
+           {id:"motor", label:"New motor", price:500, q:"garages", def:false}]},
  {sec:"General Rehab", name:"Kitchen", amt:"GenAmountKitchen", cmt:"GenCmtKitchen",
-   picks:[{id:"kitchen", label:"Kitchen", none:true, opts:[
-      {id:"allnew", label:"All new", price:12500, q:"flat", def:true},
-      {id:"counter", label:"Countertops", price:4500, q:"flat"},
-      {id:"paint", label:"Paint", price:1000, q:"flat"}]}]},
+   addons:[{id:"allnew", label:"All new", price:12500, q:"flat", def:true},
+           {id:"highend", label:"All new (high end)", price:17500, q:"flat", def:false},
+           {id:"counter", label:"Countertops", price:4000, q:"flat", def:false},
+           {id:"paint", label:"Paint", price:2500, q:"flat", def:false}]},
  {sec:"General Rehab", name:"Locks / Trash Out / Demo", amt:"GenAmountLockTrash", cmt:"GenCmtLockTrash",
    picks:[{id:"demo", label:"Scope", none:true, opts:[
       {id:"std", label:"Standard", price:5000, q:"flat", def:true},
       {id:"med", label:"Medium", price:7500, q:"flat"},
       {id:"heavy", label:"Heavy", price:10000, q:"flat"}]}]},
- {sec:"General Rehab", name:"Materials", amt:"GenAmountMaterial", cmt:"GenCmtMaterial",
-   picks:[{id:"mat", label:"Finish level", none:true, opts:[
-      {id:"std", label:"Standard finish", price:10000, q:"flat", def:true},
-      {id:"high", label:"High end finish", price:15000, q:"flat"}]}]},
+ {sec:"General Rehab", name:"Materials", amt:"GenAmountMaterial", cmt:"GenCmtMaterial", lineItems:true},
  {sec:"General Rehab", name:"Paint", amt:"GenAmountPaint", cmt:"GenCmtPaint",
    addons:[{id:"int", label:"Interior", price:3, q:"sqft", def:true},
            {id:"ext", label:"Exterior", price:3, q:"sqft", def:true},
            {id:"texture", label:"Texture", price:1, q:"sqft", def:false},
            {id:"popcorn", label:"Popcorn ceiling scrape", price:1, q:"sqft", def:false}]},
  {sec:"General Rehab", name:"Plumbing Fixtures", amt:"GenAmountPlumbingFixture", cmt:"GenCmtPlumbingFixture", lineItems:true},
- {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:".GenCmtMisc", lineItems:true},
+ {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"undefined.GenCmtMisc", lineItems:true,
+   addons:[{id:"concrete", label:"Concrete work", price:20, q:"sqft", def:false}]},
 
  // ===== FINISHES =====
  {sec:"Finishes", name:"Appliances", amt:"FinAmountAppliance", cmt:"FinCmtAppliance",
@@ -264,22 +307,29 @@ const SYSTEMS = [
       {id:"r48", label:'48" range w/ fridge', price:6500, q:"flat"}]}]},
  {sec:"Finishes", name:"Cleaning", amt:"FinAmountCleaning", cmt:"FinCmtCleaning",
    addons:[{id:"clean", label:"Cleaning", price:800, q:"flat", def:true}]},
- {sec:"Finishes", name:"Landscape", amt:"FinAmountLandscape", cmt:"FinCmtLandscape",
-   picks:[{id:"land", label:"Landscape", none:true, opts:[
-      {id:"full", label:"Full landscape", price:7500, q:"flat", def:true},
-      {id:"irr", label:"Irrigation / plants", price:5000, q:"flat"},
-      {id:"cleanup", label:"Strategic cleanup", price:2500, q:"flat"}]}]},
+ {sec:"Finishes", name:"Landscape", amt:"FinAmountLandscape", cmt:"FinCmtLandscape", lineItems:true},
  {sec:"Finishes", name:"Staging", amt:"FinAmountStaging", cmt:"FinCmtStaging",
    picks:[{id:"stage", label:"Staging", none:true, opts:[
-      {id:"high", label:"High end", price:6500, q:"flat", def:true},
+      {id:"high", label:"High end", price:6000, q:"flat", def:true},
       {id:"cheap", label:"Cheap", price:3500, q:"flat"},
       {id:"estage", label:"E-stage", price:550, q:"flat"}]}]},
- {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:".FinCmtMisc", lineItems:true},
-];
+ {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"undefined.FinCmtMisc", lineItems:true,
+   addons:[{id:"photos", label:"Photos", price:300, q:"flat", def:true},
+           {id:"hiphotos", label:"High end photos", price:1000, q:"flat", def:false},
+           {id:"reports", label:"Reports", price:1000, q:"flat", def:true}]},
+  ]
+ }
+ // ===== add more regions here, same shape as bayArea =====
+};
+
+let currentRegion = "bayArea";
+let SYSTEMS = REGIONS[currentRegion].systems;
 
 // ---- per-system editable state ----
 const state = {}; // key: system name
-SYSTEMS.forEach(s=>{
+function buildState(){
+  for(const k in state) delete state[k];
+  SYSTEMS.forEach(s=>{
   const st = {ins:false, cert:false, manualAmt:0, manualCmt:"", addons:{}, picks:{}};
   st.qtys={};
   if(s.lineItems) st.lines=[{desc:"",amt:""}];
@@ -288,25 +338,19 @@ SYSTEMS.forEach(s=>{
     const d = g.opts.find(o=>o.def);
     st.picks[g.id] = d ? d.id : "none";
   });
-  state[s.name] = st;
-});
+  state[s.amt] = st; // key by unique PDF amount field (names like "Miscellaneous" repeat)
+  });
+}
+buildState();
 
 const money = n => "$"+Math.round(n).toLocaleString("en-US");
 const moneyPlain = n => Math.round(n).toLocaleString("en-US");
 
 // ---- compute one system ----
 function computeSystem(s){
-  const st = state[s.name];
-  if(s.lineItems){
-    let total=0; const parts=[];
-    (st.lines||[]).forEach(l=>{ const a=parseFloat(l.amt)||0; if(a>0){ total+=a; parts.push((l.desc||"Item")+" $"+moneyPlain(a)); } });
-    return {amount:total, comment:parts.join(", ")};
-  }
-  if(s.manual){
-    const amt = parseFloat(st.manualAmt)||0;
-    return {amount:amt, comment:st.manualCmt||""};
-  }
+  const st = state[s.amt];
   let total=0; const parts=[];
+  // pick-one groups
   (s.picks||[]).forEach(g=>{
     const sel = st.picks[g.id];
     if(sel && sel!=="none"){
@@ -316,6 +360,7 @@ function computeSystem(s){
       parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${UNIT_LABEL[o.q]||""}`);
     }
   });
+  // addon checkboxes
   (s.addons||[]).forEach(o=>{
     if(st.addons[o.id]){
       const q = o.inline ? (parseFloat(st.qtys[o.id])||0) : qty(o.q); const line = o.price*q;
@@ -324,6 +369,16 @@ function computeSystem(s){
       else if(o.q!=="flat") parts.push(`${o.label} (0)`);
     }
   });
+  // free-form line items
+  if(s.lineItems){
+    (st.lines||[]).forEach(l=>{ const a=parseFloat(l.amt)||0; if(a>0){ total+=a; parts.push((l.desc||"Item")+" $"+moneyPlain(a)); } });
+  }
+  // manual dollar entry
+  if(s.manual){
+    const amt = parseFloat(st.manualAmt)||0;
+    if(amt>0) total+=amt;
+    if(st.manualCmt) parts.push(st.manualCmt);
+  }
   return {amount:total, comment:parts.join(", ")};
 }
 
@@ -343,7 +398,7 @@ function renderProps(){
     const inp=document.createElement("input");
     inp.id="prop_"+p.k;
     inp.type = p.type==="num"?"number":"text";
-    if(p.type==="num"){inp.min="0"; inp.step="1";}
+    if(p.type==="num"){inp.min="0"; inp.step="1"; inp.placeholder="0";}
     inp.value = prop[p.k];
     inp.addEventListener("input",()=>{ prop[p.k]= p.type==="num"? inp.value : inp.value; recompute(); });
     wrap.appendChild(inp); g.appendChild(wrap);
@@ -364,7 +419,7 @@ function renderSections(){
 }
 
 function renderSystem(s){
-  const st=state[s.name];
+  const st=state[s.amt];
   const box=document.createElement("div"); box.className="sys";
   const row=document.createElement("div"); row.className="sysrow";
   const nm=document.createElement("div"); nm.className="sysname"; nm.textContent=s.name;
@@ -374,7 +429,7 @@ function renderSystem(s){
   else if(s.picks && s.picks.some(g=>g.prompt)) tag='<span class="tag pick">pick one</span>';
   else if(s.picks) tag='<span class="tag pick">pick one</span>';
   nm.innerHTML = s.name+" "+tag;
-  const amt=document.createElement("div"); amt.className="sysamt"; amt.dataset.amt=s.name;
+  const amt=document.createElement("div"); amt.className="sysamt"; amt.dataset.amt=s.amt;
   // ins/cert
   let icHtml="";
   if(s.ins||s.cert){
@@ -393,41 +448,8 @@ function renderSystem(s){
     cb.addEventListener("change",()=>{ st[cb.dataset.ic]=cb.checked; });
   });
 
-  if(s.lineItems){
-    const list=document.createElement("div"); list.className="linelist";
-    const renderRow=(l)=>{
-      const row=document.createElement("div"); row.className="lirow";
-      const d=document.createElement("input"); d.type="text"; d.placeholder="Description"; d.value=l.desc||"";
-      d.addEventListener("input",()=>{ l.desc=d.value; });
-      const dol=document.createElement("span"); dol.className="dollar";
-      const a=document.createElement("input"); a.type="number"; a.min="0"; a.step="1"; a.placeholder="0"; a.value=l.amt||"";
-      a.addEventListener("input",()=>{ l.amt=a.value; recompute(); });
-      dol.appendChild(a);
-      const rm=document.createElement("button"); rm.type="button"; rm.className="lirm"; rm.textContent="\u00d7"; rm.title="Remove line";
-      rm.addEventListener("click",()=>{
-        const i=st.lines.indexOf(l); if(i>-1) st.lines.splice(i,1);
-        row.remove();
-        if(st.lines.length===0){ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); }
-        recompute();
-      });
-      row.appendChild(d); row.appendChild(dol); row.appendChild(rm);
-      return row;
-    };
-    st.lines.forEach(l=> list.appendChild(renderRow(l)));
-    const add=document.createElement("button"); add.type="button"; add.className="liadd"; add.textContent="+ Add line item";
-    add.addEventListener("click",()=>{ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); });
-    box.appendChild(list); box.appendChild(add);
-  } else if(s.manual){
-    const m=document.createElement("div"); m.className="manual";
-    m.innerHTML=`<span class="dollar"><input type="number" min="0" step="1" placeholder="0"></span>
-       <span class="cmt"><input type="text" placeholder="Comment (optional)"></span>`;
-    const [amtI]=m.querySelectorAll("input[type=number]");
-    const cmtI=m.querySelector("input[type=text]");
-    amtI.value = st.manualAmt||""; cmtI.value=st.manualCmt||"";
-    amtI.addEventListener("input",()=>{ st.manualAmt=amtI.value; recompute(); });
-    cmtI.addEventListener("input",()=>{ st.manualCmt=cmtI.value; });
-    box.appendChild(m);
-  } else {
+  // options: pick-one groups + addon checkboxes (rendered first)
+  if((s.picks&&s.picks.length)||(s.addons&&s.addons.length)){
     const opts=document.createElement("div"); opts.className="opts";
     // pick groups -> select
     (s.picks||[]).forEach(g=>{
@@ -461,12 +483,52 @@ function renderSystem(s){
         wrap.appendChild(qi);
         if(o.qlabel){ const u=document.createElement("span"); u.className="unit"; u.textContent=o.qlabel; wrap.appendChild(u); }
       }
-      const lc=document.createElement("span"); lc.className="linecost"; lc.dataset.line=s.name+"|"+o.id;
+      const lc=document.createElement("span"); lc.className="linecost"; lc.dataset.line=s.amt+"|"+o.id;
       cb.addEventListener("change",()=>{ st.addons[o.id]=cb.checked; recompute(); });
       wrap.appendChild(lc);
       opts.appendChild(wrap);
     });
     box.appendChild(opts);
+  }
+
+  // free-form line items
+  if(s.lineItems){
+    const list=document.createElement("div"); list.className="linelist";
+    const renderRow=(l)=>{
+      const row=document.createElement("div"); row.className="lirow";
+      const d=document.createElement("input"); d.type="text"; d.placeholder="Description (optional)"; d.value=l.desc||""; d.style.flex="1"; d.style.minWidth="0";
+      d.addEventListener("input",()=>{ l.desc=d.value; });
+      const dol=document.createElement("span"); dol.className="dollar";
+      const a=document.createElement("input"); a.type="number"; a.min="0"; a.step="1"; a.placeholder="0"; a.value=l.amt||"";
+      a.addEventListener("input",()=>{ l.amt=a.value; recompute(); });
+      dol.appendChild(a);
+      const rm=document.createElement("button"); rm.type="button"; rm.className="lirm"; rm.textContent="×"; rm.title="Remove line";
+      rm.addEventListener("click",()=>{
+        const i=st.lines.indexOf(l); if(i>-1) st.lines.splice(i,1);
+        row.remove();
+        if(st.lines.length===0){ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); }
+        recompute();
+      });
+      row.appendChild(dol); row.appendChild(d); row.appendChild(rm);
+      return row;
+    };
+    st.lines.forEach(l=> list.appendChild(renderRow(l)));
+    const add=document.createElement("button"); add.type="button"; add.className="liadd"; add.textContent="+ Add line item";
+    add.addEventListener("click",()=>{ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); });
+    box.appendChild(list); box.appendChild(add);
+  }
+
+  // manual dollar entry
+  if(s.manual){
+    const m=document.createElement("div"); m.className="manual";
+    m.innerHTML=`<span class="dollar"><input type="number" min="0" step="1" placeholder="0"></span>
+       <span class="cmt"><input type="text" placeholder="Comment (optional)"></span>`;
+    const [amtI]=m.querySelectorAll("input[type=number]");
+    const cmtI=m.querySelector("input[type=text]");
+    amtI.value = st.manualAmt||""; cmtI.value=st.manualCmt||"";
+    amtI.addEventListener("input",()=>{ st.manualAmt=amtI.value; recompute(); });
+    cmtI.addEventListener("input",()=>{ st.manualCmt=cmtI.value; });
+    box.appendChild(m);
   }
   return box;
 }
@@ -476,16 +538,16 @@ function recompute(){
   const t=totals();
   SYSTEMS.forEach(s=>{
     const r=computeSystem(s);
-    const el=document.querySelector(`[data-amt="${CSS.escape(s.name)}"]`);
+    const el=document.querySelector(`[data-amt="${CSS.escape(s.amt)}"]`);
     if(el){ el.textContent=money(r.amount); el.classList.toggle("zero", r.amount<=0); }
     // per-line costs
     (s.addons||[]).forEach(o=>{
-      const lc=document.querySelector(`[data-line="${CSS.escape(s.name+"|"+o.id)}"]`);
-      if(lc){ const q=o.inline ? (parseFloat(state[s.name].qtys[o.id])||0) : qty(o.q); lc.textContent = state[s.name].addons[o.id] ? money(o.price*q) : ""; }
+      const lc=document.querySelector(`[data-line="${CSS.escape(s.amt+"|"+o.id)}"]`);
+      if(lc){ const q=o.inline ? (parseFloat(state[s.amt].qtys[o.id])||0) : qty(o.q); lc.textContent = state[s.amt].addons[o.id] ? money(o.price*q) : ""; }
     });
     (s.picks||[]).forEach(g=>{
       const lc=document.querySelector(`[data-pick="${CSS.escape(g.id)}"]`);
-      if(lc){ const sel=state[s.name].picks[g.id];
+      if(lc){ const sel=state[s.amt].picks[g.id];
         if(sel&&sel!=="none"){ const o=g.opts.find(x=>x.id===sel); lc.textContent=money(o.price*qty(o.q)); }
         else lc.textContent=""; }
     });
@@ -538,8 +600,8 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
       const r=computeSystem(s);
       if(r.amount>0) setText(s.amt, moneyPlain(r.amount));
       if(r.comment) setText(s.cmt, r.comment);
-      if(state[s.name].ins) check(s.ins,true);
-      if(state[s.name].cert) check(s.cert,true);
+      if(state[s.amt].ins) check(s.ins,true);
+      if(state[s.amt].cert) check(s.cert,true);
     });
     setText("MajSubtotal", moneyPlain(t["Major Systems"]));
     setText("GenSubtotal", moneyPlain(t["General Rehab"]));
@@ -587,6 +649,22 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
   }catch(err){ console.error(err); toast("PDF error — check console"); }
 });
 
+// ---- region selector ----
+function setRegion(key){
+  if(!REGIONS[key]) return;
+  currentRegion = key;
+  SYSTEMS = REGIONS[key].systems;
+  buildState();
+  renderSections();
+  recompute();
+}
+(function(){
+  const sel=document.getElementById("regionSel");
+  Object.keys(REGIONS).forEach(k=>{ const o=document.createElement("option"); o.value=k; o.textContent=REGIONS[k].label; sel.appendChild(o); });
+  sel.value=currentRegion;
+  sel.addEventListener("change",()=>setRegion(sel.value));
+})();
+
 renderProps(); renderSections(); recompute();
 
 // ---- roof square calculator ----
@@ -622,6 +700,46 @@ const PITCH=[
     const el=document.getElementById("prop_roofSquares"); if(el) el.value=sq;
     recompute(); toast("Roof set to "+sq+" squares");
   });
+})();
+
+// ---- PWA: offline service worker + install prompt ----
+if("serviceWorker" in navigator && location.protocol!=="file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+let deferredPrompt=null;
+const installBtn=document.getElementById("installBtn");
+window.addEventListener("beforeinstallprompt",(e)=>{ e.preventDefault(); deferredPrompt=e; if(installBtn) installBtn.classList.add("show"); });
+if(installBtn){
+  installBtn.addEventListener("click", async ()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null; installBtn.classList.remove("show");
+  });
+}
+window.addEventListener("appinstalled",()=>{ if(installBtn) installBtn.classList.remove("show"); const h=document.getElementById("installHint"); if(h) h.classList.remove("show"); toast("Installed — open it from your home screen"); });
+
+// ---- in-app "how to install" hint (platform-aware, dismissible) ----
+(function(){
+  const hint=document.getElementById("installHint");
+  if(!hint) return;
+  const ua=navigator.userAgent||"";
+  const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone===true;
+  if(standalone) return;                                   // already installed
+  if(localStorage.getItem("installHintDismissed")==="1") return;
+  const isiOS = /iPad|iPhone|iPod/.test(ua) || (navigator.maxTouchPoints>1 && /Mac/.test(ua));
+  const isAndroid = /Android/.test(ua);
+  let msg;
+  if(isiOS){
+    msg = "Add to your home screen: tap <b>Share</b> &#x2191;, then <b>Add to Home Screen</b>.";
+  } else if(isAndroid){
+    msg = "Install this app: tap <b>⬇ Install app</b> above, or your browser menu &rarr; <b>Add to Home screen</b>.";
+  } else {
+    msg = "Install for offline use: click the <b>install icon</b> in the address bar, or <b>⬇ Install app</b> above.";
+  }
+  hint.querySelector(".ih-text").innerHTML = msg;
+  hint.classList.add("show");
+  hint.querySelector(".ih-x").addEventListener("click",()=>{ hint.classList.remove("show"); try{ localStorage.setItem("installHintDismissed","1"); }catch(e){} });
 })();
 </script>
 </body>
