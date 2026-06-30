@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Reno Budget Estimator — Wedgewood</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<meta name="description" content="Wedgewood renovation budget estimator — fills the standard budget PDF.">
+<meta name="theme-color" content="#234b5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Reno Budget">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<!-- pdf-lib is bundled locally (vendor/) so PDF export works fully offline -->
+<script src="vendor/pdf-lib.min.js"></script>
 <style>
   :root{
     --bg:#eef0f2; --card:#ffffff; --ink:#15191e; --muted:#6b7480;
@@ -84,6 +94,10 @@
   button.act:active{transform:translateY(1px)}
   .toast{position:fixed;bottom:132px;left:50%;transform:translateX(-50%);background:#15191e;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:60;pointer-events:none}
   .toast.show{opacity:1}
+  .region{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+  .region select{font-weight:600;color:var(--accent)}
+  .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;margin-top:4px;display:none}
+  .installbtn.show{display:inline-block}
   @media(max-width:560px){.grand .val{font-size:21px}.subs{display:none}.sysname{flex-basis:100%}}
 </style>
 </head>
@@ -91,6 +105,11 @@
 <div class="wrap">
   <header class="top">
     <div class="brand">WEDGEWOOD<small>Renovation Budget Estimator</small></div>
+    <div class="region">
+      <label class="fld" for="regionSel">Pricing region</label>
+      <select id="regionSel"></select>
+      <button type="button" id="installBtn" class="installbtn">⬇ Install app</button>
+    </div>
   </header>
 
   <div class="card">
@@ -169,7 +188,15 @@ const UNIT_LABEL = {
 
 // ---- pricing model (from BAY pricing sheet, Sheet2) ----
 // each system maps to ONE pdf amount field; options roll up into it.
-const SYSTEMS = [
+//
+// All pricing lives in REGIONS. To add a region later: copy the whole
+// `bayArea` block below, give it a new key + label, edit the prices, and
+// the region dropdown at the top of the page picks it up automatically.
+// (See README.md → "Updating prices / adding a region".)
+const REGIONS = {
+ bayArea: {
+  label: "Bay Area",
+  systems: [
  // ===== MAJOR SYSTEMS =====
  {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", manual:true},
  {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", manual:true,
@@ -179,7 +206,7 @@ const SYSTEMS = [
       {id:"tearoff", label:"Tearoff", price:750, q:"roofSquares"},
       {id:"layover", label:"Layover", price:500, q:"roofSquares"}]}],
    addons:[{id:"cert", label:"Roof cert", price:2000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:"InspectHvac", cert:"CertHvac",
+ {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:"undefined.InspectHvac", cert:"CertHvac",
    picks:[{id:"hvac", label:"HVAC scope", none:true, prompt:true, opts:[
       {id:"service", label:"Service", price:2000, q:"flat"},
       {id:"cond2", label:"2 ton condenser", price:3500, q:"flat"},
@@ -189,26 +216,26 @@ const SYSTEMS = [
       {id:"duct", label:"Duct work", price:2500, q:"flat"},
       {id:"allnew", label:"All new", price:10000, q:"flat"}]}]},
  {sec:"Major Systems", name:"Electrical Panel / System", amt:"MajAmountElectricalPanel", cmt:"MajCmtElectricalPanel", ins:"InspectElectricalPanel", cert:"CertElectricalPanel", lineItems:true},
- {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:"InspectWaterHeater", cert:"CertWaterHeater",
+ {sec:"Major Systems", name:"Water Heater", amt:"MajAmountWaterHeater", cmt:"MajCmtWaterHeater", ins:"undefined.InspectWaterHeater", cert:"CertWaterHeater",
    addons:[{id:"replace", label:"Replace", price:1500, q:"flat", def:true}]},
- {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:"InspectWindow", cert:"CertWindow",
+ {sec:"Major Systems", name:"Windows", amt:"MajAmountWindow", cmt:"MajCmtWindow", ins:"undefined.InspectWindow", cert:"CertWindow",
    addons:[{id:"win", label:"Windows", price:750, q:"windows", def:false},
            {id:"slider", label:"Sliders", price:1500, q:"sliders", def:false}]},
- {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:"InspectPlumbing", cert:"CertPlumbing", lineItems:true},
- {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"InspectFoundation", cert:"CertFoundation", manual:true},
+ {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:"undefined.InspectPlumbing", cert:"CertPlumbing", lineItems:true},
+ {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"undefined.InspectFoundation", cert:"CertFoundation", manual:true},
  {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", manual:true},
- {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:"InspectChimney", cert:"CertChimney",
+ {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:"undefined.InspectChimney", cert:"CertChimney",
    addons:[{id:"paint", label:"Paint", price:500, q:"flat", def:true},
            {id:"tile", label:"Tile", price:2000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"InspectCrawlspace", cert:"CertCrawlspace", manual:true},
- {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"InspectTermite", cert:"CertTermite", manual:true},
- {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"InspectPool", cert:"CertPool",
+ {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"undefined.InspectCrawlspace", cert:"CertCrawlspace", manual:true},
+ {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"undefined.InspectTermite", cert:"CertTermite", manual:true},
+ {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"undefined.InspectPool", cert:"CertPool",
    addons:[{id:"replaster", label:"Replaster", price:10000, q:"flat", def:false},
            {id:"equip", label:"New equipment", price:8000, q:"flat", def:false},
            {id:"startup", label:"Startup", price:1000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"InspectSpa", cert:"CertSpa", manual:true},
- {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"InspectWell", cert:"CertWell", manual:true},
- {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"InspectMisc", cert:"CertMisc", lineItems:true},
+ {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"undefined.InspectSpa", cert:"CertSpa", manual:true},
+ {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"undefined.InspectWell", cert:"CertWell", manual:true},
+ {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"undefined.InspectMisc", cert:"CertMisc", lineItems:true},
 
  // ===== GENERAL REHAB =====
  {sec:"General Rehab", name:"Bathroom", amt:"GenAmountBathroom", cmt:"GenCmtBathroom",
@@ -259,7 +286,7 @@ const SYSTEMS = [
            {id:"texture", label:"Texture", price:1, q:"sqft", def:false},
            {id:"popcorn", label:"Popcorn ceiling scrape", price:1, q:"sqft", def:false}]},
  {sec:"General Rehab", name:"Plumbing Fixtures", amt:"GenAmountPlumbingFixture", cmt:"GenCmtPlumbingFixture", lineItems:true},
- {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"GenCmtMisc", lineItems:true,
+ {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"undefined.GenCmtMisc", lineItems:true,
    addons:[{id:"concrete", label:"Concrete work", price:20, q:"sqft", def:false}]},
 
  // ===== FINISHES =====
@@ -281,15 +308,23 @@ const SYSTEMS = [
       {id:"high", label:"High end", price:6000, q:"flat", def:true},
       {id:"cheap", label:"Cheap", price:3500, q:"flat"},
       {id:"estage", label:"E-stage", price:550, q:"flat"}]}]},
- {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"FinCmtMisc", lineItems:true,
+ {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"undefined.FinCmtMisc", lineItems:true,
    addons:[{id:"photos", label:"Photos", price:300, q:"flat", def:true},
            {id:"hiphotos", label:"High end photos", price:1000, q:"flat", def:false},
            {id:"reports", label:"Reports", price:1000, q:"flat", def:true}]},
-];
+  ]
+ }
+ // ===== add more regions here, same shape as bayArea =====
+};
+
+let currentRegion = "bayArea";
+let SYSTEMS = REGIONS[currentRegion].systems;
 
 // ---- per-system editable state ----
 const state = {}; // key: system name
-SYSTEMS.forEach(s=>{
+function buildState(){
+  for(const k in state) delete state[k];
+  SYSTEMS.forEach(s=>{
   const st = {ins:false, cert:false, manualAmt:0, manualCmt:"", addons:{}, picks:{}};
   st.qtys={};
   if(s.lineItems) st.lines=[{desc:"",amt:""}];
@@ -298,15 +333,17 @@ SYSTEMS.forEach(s=>{
     const d = g.opts.find(o=>o.def);
     st.picks[g.id] = d ? d.id : "none";
   });
-  state[s.name] = st;
-});
+  state[s.amt] = st; // key by unique PDF amount field (names like "Miscellaneous" repeat)
+  });
+}
+buildState();
 
 const money = n => "$"+Math.round(n).toLocaleString("en-US");
 const moneyPlain = n => Math.round(n).toLocaleString("en-US");
 
 // ---- compute one system ----
 function computeSystem(s){
-  const st = state[s.name];
+  const st = state[s.amt];
   let total=0; const parts=[];
   // pick-one groups
   (s.picks||[]).forEach(g=>{
@@ -377,7 +414,7 @@ function renderSections(){
 }
 
 function renderSystem(s){
-  const st=state[s.name];
+  const st=state[s.amt];
   const box=document.createElement("div"); box.className="sys";
   const row=document.createElement("div"); row.className="sysrow";
   const nm=document.createElement("div"); nm.className="sysname"; nm.textContent=s.name;
@@ -387,7 +424,7 @@ function renderSystem(s){
   else if(s.picks && s.picks.some(g=>g.prompt)) tag='<span class="tag pick">pick one</span>';
   else if(s.picks) tag='<span class="tag pick">pick one</span>';
   nm.innerHTML = s.name+" "+tag;
-  const amt=document.createElement("div"); amt.className="sysamt"; amt.dataset.amt=s.name;
+  const amt=document.createElement("div"); amt.className="sysamt"; amt.dataset.amt=s.amt;
   // ins/cert
   let icHtml="";
   if(s.ins||s.cert){
@@ -441,7 +478,7 @@ function renderSystem(s){
         wrap.appendChild(qi);
         if(o.qlabel){ const u=document.createElement("span"); u.className="unit"; u.textContent=o.qlabel; wrap.appendChild(u); }
       }
-      const lc=document.createElement("span"); lc.className="linecost"; lc.dataset.line=s.name+"|"+o.id;
+      const lc=document.createElement("span"); lc.className="linecost"; lc.dataset.line=s.amt+"|"+o.id;
       cb.addEventListener("change",()=>{ st.addons[o.id]=cb.checked; recompute(); });
       wrap.appendChild(lc);
       opts.appendChild(wrap);
@@ -496,16 +533,16 @@ function recompute(){
   const t=totals();
   SYSTEMS.forEach(s=>{
     const r=computeSystem(s);
-    const el=document.querySelector(`[data-amt="${CSS.escape(s.name)}"]`);
+    const el=document.querySelector(`[data-amt="${CSS.escape(s.amt)}"]`);
     if(el){ el.textContent=money(r.amount); el.classList.toggle("zero", r.amount<=0); }
     // per-line costs
     (s.addons||[]).forEach(o=>{
-      const lc=document.querySelector(`[data-line="${CSS.escape(s.name+"|"+o.id)}"]`);
-      if(lc){ const q=o.inline ? (parseFloat(state[s.name].qtys[o.id])||0) : qty(o.q); lc.textContent = state[s.name].addons[o.id] ? money(o.price*q) : ""; }
+      const lc=document.querySelector(`[data-line="${CSS.escape(s.amt+"|"+o.id)}"]`);
+      if(lc){ const q=o.inline ? (parseFloat(state[s.amt].qtys[o.id])||0) : qty(o.q); lc.textContent = state[s.amt].addons[o.id] ? money(o.price*q) : ""; }
     });
     (s.picks||[]).forEach(g=>{
       const lc=document.querySelector(`[data-pick="${CSS.escape(g.id)}"]`);
-      if(lc){ const sel=state[s.name].picks[g.id];
+      if(lc){ const sel=state[s.amt].picks[g.id];
         if(sel&&sel!=="none"){ const o=g.opts.find(x=>x.id===sel); lc.textContent=money(o.price*qty(o.q)); }
         else lc.textContent=""; }
     });
@@ -558,8 +595,8 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
       const r=computeSystem(s);
       if(r.amount>0) setText(s.amt, moneyPlain(r.amount));
       if(r.comment) setText(s.cmt, r.comment);
-      if(state[s.name].ins) check(s.ins,true);
-      if(state[s.name].cert) check(s.cert,true);
+      if(state[s.amt].ins) check(s.ins,true);
+      if(state[s.amt].cert) check(s.cert,true);
     });
     setText("MajSubtotal", moneyPlain(t["Major Systems"]));
     setText("GenSubtotal", moneyPlain(t["General Rehab"]));
@@ -607,6 +644,22 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
   }catch(err){ console.error(err); toast("PDF error — check console"); }
 });
 
+// ---- region selector ----
+function setRegion(key){
+  if(!REGIONS[key]) return;
+  currentRegion = key;
+  SYSTEMS = REGIONS[key].systems;
+  buildState();
+  renderSections();
+  recompute();
+}
+(function(){
+  const sel=document.getElementById("regionSel");
+  Object.keys(REGIONS).forEach(k=>{ const o=document.createElement("option"); o.value=k; o.textContent=REGIONS[k].label; sel.appendChild(o); });
+  sel.value=currentRegion;
+  sel.addEventListener("change",()=>setRegion(sel.value));
+})();
+
 renderProps(); renderSections(); recompute();
 
 // ---- roof square calculator ----
@@ -643,6 +696,23 @@ const PITCH=[
     recompute(); toast("Roof set to "+sq+" squares");
   });
 })();
+
+// ---- PWA: offline service worker + install prompt ----
+if("serviceWorker" in navigator && location.protocol!=="file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+let deferredPrompt=null;
+const installBtn=document.getElementById("installBtn");
+window.addEventListener("beforeinstallprompt",(e)=>{ e.preventDefault(); deferredPrompt=e; if(installBtn) installBtn.classList.add("show"); });
+if(installBtn){
+  installBtn.addEventListener("click", async ()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null; installBtn.classList.remove("show");
+  });
+}
+window.addEventListener("appinstalled",()=>{ if(installBtn) installBtn.classList.remove("show"); toast("Installed — open it from your home screen"); });
 </script>
 </body>
 </html>
