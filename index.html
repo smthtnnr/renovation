@@ -308,11 +308,7 @@ const REGIONS = {
       {id:"r48", label:'48" range w/ fridge', price:6500, q:"flat"}]}]},
  {sec:"Finishes", name:"Cleaning", amt:"FinAmountCleaning", cmt:"FinCmtCleaning",
    addons:[{id:"clean", label:"Cleaning", price:800, q:"flat", def:true}]},
- {sec:"Finishes", name:"Landscape", amt:"FinAmountLandscape", cmt:"FinCmtLandscape",
-   picks:[{id:"land", label:"Landscape", none:true, opts:[
-      {id:"full", label:"Full landscape", price:7500, q:"flat", def:true},
-      {id:"irr", label:"Irrigation / plants", price:5000, q:"flat"},
-      {id:"cleanup", label:"Strategic cleanup", price:2000, q:"flat"}]}]},
+ {sec:"Finishes", name:"Landscape", amt:"FinAmountLandscape", cmt:"FinCmtLandscape", lineItems:true},
  {sec:"Finishes", name:"Staging", amt:"FinAmountStaging", cmt:"FinCmtStaging",
    picks:[{id:"stage", label:"Staging", none:true, opts:[
       {id:"high", label:"High end", price:6000, q:"flat", def:true},
