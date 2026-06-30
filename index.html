@@ -98,6 +98,12 @@
   .region select{font-weight:600;color:var(--accent)}
   .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;margin-top:4px;display:none}
   .installbtn.show{display:inline-block}
+  .installhint{display:none;align-items:center;gap:10px;background:#eef0f7;border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--ink)}
+  .installhint.show{display:flex}
+  .installhint .ih-ic{flex:none;font-size:15px}
+  .installhint .ih-text{flex:1;line-height:1.4}
+  .installhint b{color:var(--accent)}
+  .installhint .ih-x{flex:none;background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 2px;line-height:1}
   @media(max-width:560px){.grand .val{font-size:21px}.subs{display:none}.sysname{flex-basis:100%}}
 </style>
 </head>
@@ -111,6 +117,12 @@
       <button type="button" id="installBtn" class="installbtn">⬇ Install app</button>
     </div>
   </header>
+
+  <div id="installHint" class="installhint">
+    <span class="ih-ic">📲</span>
+    <span class="ih-text"></span>
+    <button type="button" class="ih-x" title="Dismiss" aria-label="Dismiss">&times;</button>
+  </div>
 
   <div class="card">
     <h2>Property &amp; Quantities</h2>
@@ -712,7 +724,30 @@ if(installBtn){
     deferredPrompt=null; installBtn.classList.remove("show");
   });
 }
-window.addEventListener("appinstalled",()=>{ if(installBtn) installBtn.classList.remove("show"); toast("Installed — open it from your home screen"); });
+window.addEventListener("appinstalled",()=>{ if(installBtn) installBtn.classList.remove("show"); const h=document.getElementById("installHint"); if(h) h.classList.remove("show"); toast("Installed — open it from your home screen"); });
+
+// ---- in-app "how to install" hint (platform-aware, dismissible) ----
+(function(){
+  const hint=document.getElementById("installHint");
+  if(!hint) return;
+  const ua=navigator.userAgent||"";
+  const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone===true;
+  if(standalone) return;                                   // already installed
+  if(localStorage.getItem("installHintDismissed")==="1") return;
+  const isiOS = /iPad|iPhone|iPod/.test(ua) || (navigator.maxTouchPoints>1 && /Mac/.test(ua));
+  const isAndroid = /Android/.test(ua);
+  let msg;
+  if(isiOS){
+    msg = "Add to your home screen: tap <b>Share</b> &#x2191;, then <b>Add to Home Screen</b>.";
+  } else if(isAndroid){
+    msg = "Install this app: tap <b>⬇ Install app</b> above, or your browser menu &rarr; <b>Add to Home screen</b>.";
+  } else {
+    msg = "Install for offline use: click the <b>install icon</b> in the address bar, or <b>⬇ Install app</b> above.";
+  }
+  hint.querySelector(".ih-text").innerHTML = msg;
+  hint.classList.add("show");
+  hint.querySelector(".ih-x").addEventListener("click",()=>{ hint.classList.remove("show"); try{ localStorage.setItem("installHintDismissed","1"); }catch(e){} });
+})();
 </script>
 </body>
 </html>
