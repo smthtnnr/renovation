@@ -172,19 +172,20 @@ const UNIT_LABEL = {
 const SYSTEMS = [
  // ===== MAJOR SYSTEMS =====
  {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", manual:true},
- {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", manual:true},
+ {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", manual:true,
+   addons:[{id:"pos", label:"POS Requirement", price:15000, q:"flat", def:false}]},
  {sec:"Major Systems", name:"Roof", amt:"MajAmountRoof", cmt:"MajCmtRoof", ins:"InspectRoof", cert:"CertRoof",
    picks:[{id:"roofType", label:"Roof work", none:true, opts:[
       {id:"tearoff", label:"Tearoff", price:750, q:"roofSquares"},
       {id:"layover", label:"Layover", price:500, q:"roofSquares"}]}],
-   addons:[{id:"cert", label:"Roof cert", price:2500, q:"flat", def:false}]},
+   addons:[{id:"cert", label:"Roof cert", price:2000, q:"flat", def:false}]},
  {sec:"Major Systems", name:"HVAC", amt:"MajAmountHvac", cmt:"MajCmtHvac", ins:"InspectHvac", cert:"CertHvac",
    picks:[{id:"hvac", label:"HVAC scope", none:true, prompt:true, opts:[
       {id:"service", label:"Service", price:2000, q:"flat"},
-      {id:"cond2", label:"2 ton condenser", price:3000, q:"flat"},
-      {id:"cond3", label:"3 ton condenser", price:3500, q:"flat"},
+      {id:"cond2", label:"2 ton condenser", price:3500, q:"flat"},
+      {id:"cond3", label:"3 ton condenser", price:4000, q:"flat"},
       {id:"furnace", label:"Furnace", price:3500, q:"flat"},
-      {id:"wall", label:"Wall heater", price:2500, q:"flat"},
+      {id:"wall", label:"Wall heater", price:2000, q:"flat"},
       {id:"duct", label:"Duct work", price:2500, q:"flat"},
       {id:"allnew", label:"All new", price:10000, q:"flat"}]}]},
  {sec:"Major Systems", name:"Electrical Panel / System", amt:"MajAmountElectricalPanel", cmt:"MajCmtElectricalPanel", ins:"InspectElectricalPanel", cert:"CertElectricalPanel", lineItems:true},
@@ -203,7 +204,8 @@ const SYSTEMS = [
  {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"InspectTermite", cert:"CertTermite", manual:true},
  {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"InspectPool", cert:"CertPool",
    addons:[{id:"replaster", label:"Replaster", price:10000, q:"flat", def:false},
-           {id:"equip", label:"New equipment", price:8000, q:"flat", def:false}]},
+           {id:"equip", label:"New equipment", price:8000, q:"flat", def:false},
+           {id:"startup", label:"Startup", price:1000, q:"flat", def:false}]},
  {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"InspectSpa", cert:"CertSpa", manual:true},
  {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"InspectWell", cert:"CertWell", manual:true},
  {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"InspectMisc", cert:"CertMisc", lineItems:true},
@@ -211,33 +213,37 @@ const SYSTEMS = [
  // ===== GENERAL REHAB =====
  {sec:"General Rehab", name:"Bathroom", amt:"GenAmountBathroom", cmt:"GenCmtBathroom",
    addons:[{id:"full", label:"Full reno", price:5500, q:"count", def:true, inline:true, qlabel:"baths"},
+           {id:"custom", label:"Custom bathroom", price:7500, q:"count", def:false, inline:true, qlabel:"baths"},
            {id:"strategic", label:"Strategic reno", price:2500, q:"count", def:false, inline:true, qlabel:"baths"},
            {id:"mirrors", label:"Mirrors & lights", price:500, q:"count", def:false, inline:true, qlabel:"baths"}]},
  {sec:"General Rehab", name:"Doors / Hardware", amt:"GenAmountDoor", cmt:"GenCmtDoor",
    addons:[{id:"hardware", label:"Change all hardware", price:50, q:"intDoors", def:true},
            {id:"paintd", label:"Paint doors", price:50, q:"intDoors", def:true},
            {id:"replace", label:"Replace doors", price:250, q:"intDoors", def:false},
-           {id:"front", label:"Front door", price:1000, q:"frontDoors", def:true}]},
+           {id:"front", label:"Front door", price:1000, q:"frontDoors", def:true},
+           {id:"mirror", label:"Mirrored sliders", price:500, q:"beds", def:true}]},
  {sec:"General Rehab", name:"Electrical Fixtures", amt:"GenAmountElectricalFixture", cmt:"GenCmtElectricalFixture",
-   addons:[{id:"all", label:"Change all in house", price:1500, q:"flat", def:true},
-           {id:"bedlight", label:"Add bedroom lighting", price:150, q:"beds", def:true},
-           {id:"extlight", label:"Exterior lighting", price:1500, q:"flat", def:false}]},
+   addons:[{id:"all", label:"Change all in house", price:2500, q:"flat", def:true},
+           {id:"bedlight", label:"Add bedroom lighting", price:250, q:"beds", def:true},
+           {id:"extlight", label:"Exterior lighting", price:2000, q:"flat", def:true}]},
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
  {sec:"General Rehab", name:"Flooring", amt:"GenAmountFlooring", cmt:"GenCmtFlooring",
    picks:[{id:"floor", label:"Flooring", none:true, opts:[
       {id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true},
+      {id:"carpet", label:"Carpet", price:3, q:"sqft"},
       {id:"eng", label:"Engineered / base", price:10, q:"sqft"}]}]},
  {sec:"General Rehab", name:"Framing / Drywall", amt:"GenAmountFraming", cmt:"GenCmtFraming", lineItems:true},
  {sec:"General Rehab", name:"Garage", amt:"GenAmountGarage", cmt:"GenCmtGarage",
    addons:[{id:"single", label:"Single car door", price:1000, q:"garageDoors", def:false},
            {id:"double", label:"Two car door", price:1500, q:"garageDoors", def:false},
-           {id:"motor", label:"New motor", price:700, q:"garages", def:false}]},
+           {id:"motor", label:"New motor", price:500, q:"garages", def:false}]},
  {sec:"General Rehab", name:"Kitchen", amt:"GenAmountKitchen", cmt:"GenCmtKitchen",
    picks:[{id:"kitchen", label:"Kitchen", none:true, opts:[
       {id:"allnew", label:"All new", price:12500, q:"flat", def:true},
-      {id:"counter", label:"Countertops", price:4500, q:"flat"},
-      {id:"paint", label:"Paint", price:1000, q:"flat"}]}]},
+      {id:"highend", label:"All new (high end)", price:17500, q:"flat"},
+      {id:"counter", label:"Countertops", price:4000, q:"flat"},
+      {id:"paint", label:"Paint", price:2500, q:"flat"}]}]},
  {sec:"General Rehab", name:"Locks / Trash Out / Demo", amt:"GenAmountLockTrash", cmt:"GenCmtLockTrash",
    picks:[{id:"demo", label:"Scope", none:true, opts:[
       {id:"std", label:"Standard", price:5000, q:"flat", def:true},
@@ -253,7 +259,8 @@ const SYSTEMS = [
            {id:"texture", label:"Texture", price:1, q:"sqft", def:false},
            {id:"popcorn", label:"Popcorn ceiling scrape", price:1, q:"sqft", def:false}]},
  {sec:"General Rehab", name:"Plumbing Fixtures", amt:"GenAmountPlumbingFixture", cmt:"GenCmtPlumbingFixture", lineItems:true},
- {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"GenCmtMisc", lineItems:true},
+ {sec:"General Rehab", name:"Miscellaneous", amt:"GenAmountMisc", cmt:"GenCmtMisc", lineItems:true,
+   addons:[{id:"concrete", label:"Concrete work", price:20, q:"sqft", def:false}]},
 
  // ===== FINISHES =====
  {sec:"Finishes", name:"Appliances", amt:"FinAmountAppliance", cmt:"FinCmtAppliance",
@@ -268,13 +275,16 @@ const SYSTEMS = [
    picks:[{id:"land", label:"Landscape", none:true, opts:[
       {id:"full", label:"Full landscape", price:7500, q:"flat", def:true},
       {id:"irr", label:"Irrigation / plants", price:5000, q:"flat"},
-      {id:"cleanup", label:"Strategic cleanup", price:2500, q:"flat"}]}]},
+      {id:"cleanup", label:"Strategic cleanup", price:2000, q:"flat"}]}]},
  {sec:"Finishes", name:"Staging", amt:"FinAmountStaging", cmt:"FinCmtStaging",
    picks:[{id:"stage", label:"Staging", none:true, opts:[
-      {id:"high", label:"High end", price:6500, q:"flat", def:true},
+      {id:"high", label:"High end", price:6000, q:"flat", def:true},
       {id:"cheap", label:"Cheap", price:3500, q:"flat"},
       {id:"estage", label:"E-stage", price:550, q:"flat"}]}]},
- {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"FinCmtMisc", lineItems:true},
+ {sec:"Finishes", name:"Miscellaneous", amt:"FinAmountMisc", cmt:"FinCmtMisc", lineItems:true,
+   addons:[{id:"photos", label:"Photos", price:300, q:"flat", def:true},
+           {id:"hiphotos", label:"High end photos", price:1000, q:"flat", def:false},
+           {id:"reports", label:"Reports", price:1000, q:"flat", def:true}]},
 ];
 
 // ---- per-system editable state ----
@@ -297,16 +307,8 @@ const moneyPlain = n => Math.round(n).toLocaleString("en-US");
 // ---- compute one system ----
 function computeSystem(s){
   const st = state[s.name];
-  if(s.lineItems){
-    let total=0; const parts=[];
-    (st.lines||[]).forEach(l=>{ const a=parseFloat(l.amt)||0; if(a>0){ total+=a; parts.push((l.desc||"Item")+" $"+moneyPlain(a)); } });
-    return {amount:total, comment:parts.join(", ")};
-  }
-  if(s.manual){
-    const amt = parseFloat(st.manualAmt)||0;
-    return {amount:amt, comment:st.manualCmt||""};
-  }
   let total=0; const parts=[];
+  // pick-one groups
   (s.picks||[]).forEach(g=>{
     const sel = st.picks[g.id];
     if(sel && sel!=="none"){
@@ -316,6 +318,7 @@ function computeSystem(s){
       parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${UNIT_LABEL[o.q]||""}`);
     }
   });
+  // addon checkboxes
   (s.addons||[]).forEach(o=>{
     if(st.addons[o.id]){
       const q = o.inline ? (parseFloat(st.qtys[o.id])||0) : qty(o.q); const line = o.price*q;
@@ -324,6 +327,16 @@ function computeSystem(s){
       else if(o.q!=="flat") parts.push(`${o.label} (0)`);
     }
   });
+  // free-form line items
+  if(s.lineItems){
+    (st.lines||[]).forEach(l=>{ const a=parseFloat(l.amt)||0; if(a>0){ total+=a; parts.push((l.desc||"Item")+" $"+moneyPlain(a)); } });
+  }
+  // manual dollar entry
+  if(s.manual){
+    const amt = parseFloat(st.manualAmt)||0;
+    if(amt>0) total+=amt;
+    if(st.manualCmt) parts.push(st.manualCmt);
+  }
   return {amount:total, comment:parts.join(", ")};
 }
 
@@ -393,41 +406,8 @@ function renderSystem(s){
     cb.addEventListener("change",()=>{ st[cb.dataset.ic]=cb.checked; });
   });
 
-  if(s.lineItems){
-    const list=document.createElement("div"); list.className="linelist";
-    const renderRow=(l)=>{
-      const row=document.createElement("div"); row.className="lirow";
-      const d=document.createElement("input"); d.type="text"; d.placeholder="Description"; d.value=l.desc||"";
-      d.addEventListener("input",()=>{ l.desc=d.value; });
-      const dol=document.createElement("span"); dol.className="dollar";
-      const a=document.createElement("input"); a.type="number"; a.min="0"; a.step="1"; a.placeholder="0"; a.value=l.amt||"";
-      a.addEventListener("input",()=>{ l.amt=a.value; recompute(); });
-      dol.appendChild(a);
-      const rm=document.createElement("button"); rm.type="button"; rm.className="lirm"; rm.textContent="\u00d7"; rm.title="Remove line";
-      rm.addEventListener("click",()=>{
-        const i=st.lines.indexOf(l); if(i>-1) st.lines.splice(i,1);
-        row.remove();
-        if(st.lines.length===0){ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); }
-        recompute();
-      });
-      row.appendChild(d); row.appendChild(dol); row.appendChild(rm);
-      return row;
-    };
-    st.lines.forEach(l=> list.appendChild(renderRow(l)));
-    const add=document.createElement("button"); add.type="button"; add.className="liadd"; add.textContent="+ Add line item";
-    add.addEventListener("click",()=>{ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); });
-    box.appendChild(list); box.appendChild(add);
-  } else if(s.manual){
-    const m=document.createElement("div"); m.className="manual";
-    m.innerHTML=`<span class="dollar"><input type="number" min="0" step="1" placeholder="0"></span>
-       <span class="cmt"><input type="text" placeholder="Comment (optional)"></span>`;
-    const [amtI]=m.querySelectorAll("input[type=number]");
-    const cmtI=m.querySelector("input[type=text]");
-    amtI.value = st.manualAmt||""; cmtI.value=st.manualCmt||"";
-    amtI.addEventListener("input",()=>{ st.manualAmt=amtI.value; recompute(); });
-    cmtI.addEventListener("input",()=>{ st.manualCmt=cmtI.value; });
-    box.appendChild(m);
-  } else {
+  // options: pick-one groups + addon checkboxes (rendered first)
+  if((s.picks&&s.picks.length)||(s.addons&&s.addons.length)){
     const opts=document.createElement("div"); opts.className="opts";
     // pick groups -> select
     (s.picks||[]).forEach(g=>{
@@ -467,6 +447,46 @@ function renderSystem(s){
       opts.appendChild(wrap);
     });
     box.appendChild(opts);
+  }
+
+  // free-form line items
+  if(s.lineItems){
+    const list=document.createElement("div"); list.className="linelist";
+    const renderRow=(l)=>{
+      const row=document.createElement("div"); row.className="lirow";
+      const d=document.createElement("input"); d.type="text"; d.placeholder="Description"; d.value=l.desc||"";
+      d.addEventListener("input",()=>{ l.desc=d.value; });
+      const dol=document.createElement("span"); dol.className="dollar";
+      const a=document.createElement("input"); a.type="number"; a.min="0"; a.step="1"; a.placeholder="0"; a.value=l.amt||"";
+      a.addEventListener("input",()=>{ l.amt=a.value; recompute(); });
+      dol.appendChild(a);
+      const rm=document.createElement("button"); rm.type="button"; rm.className="lirm"; rm.textContent="×"; rm.title="Remove line";
+      rm.addEventListener("click",()=>{
+        const i=st.lines.indexOf(l); if(i>-1) st.lines.splice(i,1);
+        row.remove();
+        if(st.lines.length===0){ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); }
+        recompute();
+      });
+      row.appendChild(d); row.appendChild(dol); row.appendChild(rm);
+      return row;
+    };
+    st.lines.forEach(l=> list.appendChild(renderRow(l)));
+    const add=document.createElement("button"); add.type="button"; add.className="liadd"; add.textContent="+ Add line item";
+    add.addEventListener("click",()=>{ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); });
+    box.appendChild(list); box.appendChild(add);
+  }
+
+  // manual dollar entry
+  if(s.manual){
+    const m=document.createElement("div"); m.className="manual";
+    m.innerHTML=`<span class="dollar"><input type="number" min="0" step="1" placeholder="0"></span>
+       <span class="cmt"><input type="text" placeholder="Comment (optional)"></span>`;
+    const [amtI]=m.querySelectorAll("input[type=number]");
+    const cmtI=m.querySelector("input[type=text]");
+    amtI.value = st.manualAmt||""; cmtI.value=st.manualCmt||"";
+    amtI.addEventListener("input",()=>{ st.manualAmt=amtI.value; recompute(); });
+    cmtI.addEventListener("input",()=>{ st.manualCmt=cmtI.value; });
+    box.appendChild(m);
   }
   return box;
 }
