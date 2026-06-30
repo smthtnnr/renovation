@@ -270,10 +270,9 @@ const REGIONS = {
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
  {sec:"General Rehab", name:"Flooring", amt:"GenAmountFlooring", cmt:"GenCmtFlooring",
-   picks:[{id:"floor", label:"Flooring", none:true, opts:[
-      {id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true},
-      {id:"carpet", label:"Carpet", price:3, q:"sqft"},
-      {id:"eng", label:"Engineered / base", price:10, q:"sqft"}]}]},
+   addons:[{id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true, inline:true, qlabel:"sqft"},
+           {id:"carpet", label:"Carpet", price:3, q:"sqft", def:false, inline:true, qlabel:"sqft"},
+           {id:"eng", label:"Engineered / base", price:10, q:"sqft", def:false, inline:true, qlabel:"sqft"}]},
  {sec:"General Rehab", name:"Framing / Drywall", amt:"GenAmountFraming", cmt:"GenCmtFraming", lineItems:true},
  {sec:"General Rehab", name:"Garage", amt:"GenAmountGarage", cmt:"GenCmtGarage",
    addons:[{id:"single", label:"Single car door", price:1000, q:"garageDoors", def:false},
