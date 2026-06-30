@@ -177,6 +177,7 @@ const PROPS = [
   {k:"propId", label:"Property ID", type:"text"},
   {k:"sqft", label:"Living sq ft", type:"num"},
   {k:"beds", label:"Bedrooms", type:"num"},
+  {k:"baths", label:"Bathrooms", type:"num"},
   {k:"intDoors", label:"Interior doors", type:"num"},
   {k:"frontDoors", label:"Front doors", type:"num", def:1},
   {k:"windows", label:"Windows", type:"num"},
@@ -185,15 +186,16 @@ const PROPS = [
   {k:"garageDoors", label:"Garage doors", type:"num"},
   {k:"garages", label:"Garages", type:"num"},
 ];
-const prop = {}; PROPS.forEach(p=> prop[p.k] = p.def!=null?p.def:(p.type==="num"?0:""));
+const prop = {}; PROPS.forEach(p=> prop[p.k] = p.def!=null?p.def:""); // blank by default (placeholder shows 0)
 
 // qty resolver
 function qty(key){
   if(key==="flat") return 1;
+  if(key==="bedsBaths") return qty("beds")+qty("baths");
   const v = parseFloat(prop[key]); return isNaN(v)?0:v;
 }
 const UNIT_LABEL = {
-  flat:"flat", sqft:"/sf", beds:"/bedroom", baths:"/bath", intDoors:"/int door",
+  flat:"flat", sqft:"/sf", beds:"/bedroom", baths:"/bath", bedsBaths:"/bed+bath", intDoors:"/int door",
   frontDoors:"/front door", windows:"/window", sliders:"/slider",
   roofSquares:"/sq", garageDoors:"/door", garages:"/garage", fenceLF:"/ln ft"
 };
@@ -210,8 +212,8 @@ const REGIONS = {
   label: "Bay Area",
   systems: [
  // ===== MAJOR SYSTEMS =====
- {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", manual:true},
- {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", manual:true,
+ {sec:"Major Systems", name:"Septic System", amt:"MajAmountSeptic", cmt:"MajCmtSeptic", ins:"InspectSeptic", cert:"CertSeptic", lineItems:true},
+ {sec:"Major Systems", name:"Sewer Line", amt:"MajAmountSewer", cmt:"MajCmtSewer", ins:"InspectSewer", cert:"CertSewer", lineItems:true,
    addons:[{id:"pos", label:"POS Requirement", price:15000, q:"flat", def:false}]},
  {sec:"Major Systems", name:"Roof", amt:"MajAmountRoof", cmt:"MajCmtRoof", ins:"InspectRoof", cert:"CertRoof",
    picks:[{id:"roofType", label:"Roof work", none:true, opts:[
@@ -234,19 +236,19 @@ const REGIONS = {
    addons:[{id:"win", label:"Windows", price:750, q:"windows", def:false},
            {id:"slider", label:"Sliders", price:1500, q:"sliders", def:false}]},
  {sec:"Major Systems", name:"Plumbing System", amt:"MajAmountPlumbing", cmt:"MajCmtPlumbing", ins:"undefined.InspectPlumbing", cert:"CertPlumbing", lineItems:true},
- {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"undefined.InspectFoundation", cert:"CertFoundation", manual:true},
- {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", manual:true},
+ {sec:"Major Systems", name:"Foundation", amt:"MajAmountFoundation", cmt:"MajCmtFoundation", ins:"undefined.InspectFoundation", cert:"CertFoundation", lineItems:true},
+ {sec:"Major Systems", name:"Siding / Stucco", amt:"MajAmountSiding", cmt:"MajCmtSiding", ins:"InspectSiding", cert:"CertSiding", lineItems:true},
  {sec:"Major Systems", name:"Chimney / Fireplace", amt:"MajAmountChimney", cmt:"MajCmtChimney", ins:"undefined.InspectChimney", cert:"CertChimney",
    addons:[{id:"paint", label:"Paint", price:500, q:"flat", def:true},
            {id:"tile", label:"Tile", price:2000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"undefined.InspectCrawlspace", cert:"CertCrawlspace", manual:true},
- {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"undefined.InspectTermite", cert:"CertTermite", manual:true},
+ {sec:"Major Systems", name:"Crawlspace / Vapor Barrier", amt:"MajAmountCrawlspace", cmt:"MajCmtCrawlspace", ins:"undefined.InspectCrawlspace", cert:"CertCrawlspace", lineItems:true},
+ {sec:"Major Systems", name:"Termite / Pest", amt:"MajAmountTermite", cmt:"MajCmtTermite", ins:"undefined.InspectTermite", cert:"CertTermite", lineItems:true},
  {sec:"Major Systems", name:"Pool", amt:"MajAmountPool", cmt:"MajCmtPool", ins:"undefined.InspectPool", cert:"CertPool",
    addons:[{id:"replaster", label:"Replaster", price:10000, q:"flat", def:false},
            {id:"equip", label:"New equipment", price:8000, q:"flat", def:false},
            {id:"startup", label:"Startup", price:1000, q:"flat", def:false}]},
- {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"undefined.InspectSpa", cert:"CertSpa", manual:true},
- {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"undefined.InspectWell", cert:"CertWell", manual:true},
+ {sec:"Major Systems", name:"Spa", amt:"MajAmountSpa", cmt:"MajCmtSpa", ins:"undefined.InspectSpa", cert:"CertSpa", lineItems:true},
+ {sec:"Major Systems", name:"Well", amt:"MajAmountWell", cmt:"MajCmtWell", ins:"undefined.InspectWell", cert:"CertWell", lineItems:true},
  {sec:"Major Systems", name:"Miscellaneous", amt:"MajAmountMisc", cmt:"MajCmtMisc", ins:"undefined.InspectMisc", cert:"CertMisc", lineItems:true},
 
  // ===== GENERAL REHAB =====
@@ -263,7 +265,7 @@ const REGIONS = {
            {id:"mirror", label:"Mirrored sliders", price:500, q:"beds", def:true}]},
  {sec:"General Rehab", name:"Electrical Fixtures", amt:"GenAmountElectricalFixture", cmt:"GenCmtElectricalFixture",
    addons:[{id:"all", label:"Change all in house", price:2500, q:"flat", def:true},
-           {id:"bedlight", label:"Add bedroom lighting", price:250, q:"beds", def:true},
+           {id:"bedlight", label:"Add bedroom/bathroom lighting", price:250, q:"bedsBaths", def:true},
            {id:"extlight", label:"Exterior lighting", price:2000, q:"flat", def:true}]},
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
@@ -278,11 +280,10 @@ const REGIONS = {
            {id:"double", label:"Two car door", price:1500, q:"garageDoors", def:false},
            {id:"motor", label:"New motor", price:500, q:"garages", def:false}]},
  {sec:"General Rehab", name:"Kitchen", amt:"GenAmountKitchen", cmt:"GenCmtKitchen",
-   picks:[{id:"kitchen", label:"Kitchen", none:true, opts:[
-      {id:"allnew", label:"All new", price:12500, q:"flat", def:true},
-      {id:"highend", label:"All new (high end)", price:17500, q:"flat"},
-      {id:"counter", label:"Countertops", price:4000, q:"flat"},
-      {id:"paint", label:"Paint", price:2500, q:"flat"}]}]},
+   addons:[{id:"allnew", label:"All new", price:12500, q:"flat", def:true},
+           {id:"highend", label:"All new (high end)", price:17500, q:"flat", def:false},
+           {id:"counter", label:"Countertops", price:4000, q:"flat", def:false},
+           {id:"paint", label:"Paint", price:2500, q:"flat", def:false}]},
  {sec:"General Rehab", name:"Locks / Trash Out / Demo", amt:"GenAmountLockTrash", cmt:"GenCmtLockTrash",
    picks:[{id:"demo", label:"Scope", none:true, opts:[
       {id:"std", label:"Standard", price:5000, q:"flat", def:true},
@@ -405,7 +406,7 @@ function renderProps(){
     const inp=document.createElement("input");
     inp.id="prop_"+p.k;
     inp.type = p.type==="num"?"number":"text";
-    if(p.type==="num"){inp.min="0"; inp.step="1";}
+    if(p.type==="num"){inp.min="0"; inp.step="1"; inp.placeholder="0";}
     inp.value = prop[p.k];
     inp.addEventListener("input",()=>{ prop[p.k]= p.type==="num"? inp.value : inp.value; recompute(); });
     wrap.appendChild(inp); g.appendChild(wrap);
@@ -503,7 +504,7 @@ function renderSystem(s){
     const list=document.createElement("div"); list.className="linelist";
     const renderRow=(l)=>{
       const row=document.createElement("div"); row.className="lirow";
-      const d=document.createElement("input"); d.type="text"; d.placeholder="Description"; d.value=l.desc||"";
+      const d=document.createElement("input"); d.type="text"; d.placeholder="Description (optional)"; d.value=l.desc||""; d.style.flex="1"; d.style.minWidth="0";
       d.addEventListener("input",()=>{ l.desc=d.value; });
       const dol=document.createElement("span"); dol.className="dollar";
       const a=document.createElement("input"); a.type="number"; a.min="0"; a.step="1"; a.placeholder="0"; a.value=l.amt||"";
@@ -516,7 +517,7 @@ function renderSystem(s){
         if(st.lines.length===0){ const nl={desc:"",amt:""}; st.lines.push(nl); list.appendChild(renderRow(nl)); }
         recompute();
       });
-      row.appendChild(d); row.appendChild(dol); row.appendChild(rm);
+      row.appendChild(dol); row.appendChild(d); row.appendChild(rm);
       return row;
     };
     st.lines.forEach(l=> list.appendChild(renderRow(l)));
