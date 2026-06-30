@@ -31,6 +31,8 @@ jobs:
           mkdir -p _site
           cp index.html manifest.webmanifest sw.js _site/
           cp -r vendor icons _site/
+          # Stamp a unique cache name per release so updates always go live.
+          sed -i "s/__BUILD_ID__/${GITHUB_SHA}/g" _site/sw.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

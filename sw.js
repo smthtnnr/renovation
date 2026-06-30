@@ -1,6 +1,8 @@
 /* Reno Budget Estimator — offline service worker.
-   Bump CACHE when you change any cached asset so clients pick up the update. */
-const CACHE = "reno-budget-v1";
+   CACHE name carries a build id that the deploy workflow replaces with the
+   commit SHA, so every release gets a fresh cache and old ones are purged.
+   (Locally the placeholder stays constant, which is fine for dev.) */
+const CACHE = "reno-budget-__BUILD_ID__";
 const ASSETS = [
   "./",
   "./index.html",
@@ -27,11 +29,28 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
+
+  // HTML / navigations: network-first so an online load always shows the
+  // latest app, falling back to cache (then index.html) when offline.
+  if (req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html")) {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put("./index.html", copy));
+          return res;
+        })
+        .catch(() => caches.match(req).then((hit) => hit || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // Everything else (pdf-lib, icons, manifest): cache-first, with a runtime
+  // update so new assets are picked up; the per-release cache name handles busting.
   e.respondWith(
     caches.match(req).then((hit) =>
       hit ||
       fetch(req).then((res) => {
-        // Runtime-cache successful same-origin GETs so the app stays available offline.
         try {
           if (res && res.ok && new URL(req.url).origin === self.location.origin) {
             const copy = res.clone();
@@ -39,7 +58,7 @@ self.addEventListener("fetch", (e) => {
           }
         } catch (_) {}
         return res;
-      }).catch(() => caches.match("./index.html"))
+      })
     )
   );
 });
