@@ -94,6 +94,7 @@
   button.act:active{transform:translateY(1px)}
   .toast{position:fixed;bottom:132px;left:50%;transform:translateX(-50%);background:#15191e;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:60;pointer-events:none}
   .toast.show{opacity:1}
+  .ver{text-align:center;font-size:10px;color:var(--muted);opacity:.55;margin:12px 0 2px;font-family:var(--mono)}
   .region{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
   .region select{font-weight:600;color:var(--accent)}
   .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;margin-top:4px;display:none}
@@ -149,6 +150,7 @@
   </div>
 
   <div id="sections"></div>
+  <div class="ver" id="ver"></div>
 </div>
 
 <div class="bar">
@@ -818,9 +820,30 @@ const PITCH=[
 })();
 
 // ---- PWA: offline service worker + install prompt ----
+// Auto-adopt new versions: reload once when an updated worker takes control,
+// and poll for updates while the app is open so it never gets stuck on a
+// cached build (important on iOS home-screen apps).
 if("serviceWorker" in navigator && location.protocol!=="file:"){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  let refreshing=false;
+  if(navigator.serviceWorker.controller){
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{
+      if(refreshing) return; refreshing=true; location.reload();
+    });
+  }
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js").then(reg=>{
+      reg.update();
+      setInterval(()=>reg.update(), 60*1000);
+    }).catch(()=>{});
+  });
 }
+
+// ---- build/version stamp (the deploy workflow replaces __BUILD_ID__ with the commit sha) ----
+(function(){
+  const BUILD="__BUILD_ID__";
+  const el=document.getElementById("ver");
+  if(el) el.textContent = "build " + (BUILD.slice(0,2)==="__" ? "dev" : BUILD.slice(0,7));
+})();
 let deferredPrompt=null;
 const installBtn=document.getElementById("installBtn");
 window.addEventListener("beforeinstallprompt",(e)=>{ e.preventDefault(); deferredPrompt=e; if(installBtn) installBtn.classList.add("show"); });

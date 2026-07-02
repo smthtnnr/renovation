@@ -31,8 +31,9 @@ jobs:
           mkdir -p _site
           cp index.html manifest.webmanifest sw.js _site/
           cp -r vendor icons _site/
-          # Stamp a unique cache name per release so updates always go live.
-          sed -i "s/__BUILD_ID__/${GITHUB_SHA}/g" _site/sw.js
+          # Stamp the commit sha into the service worker (cache name) and the
+          # page (visible build stamp) so each release busts caches and is identifiable.
+          sed -i "s/__BUILD_ID__/${GITHUB_SHA}/g" _site/sw.js _site/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
