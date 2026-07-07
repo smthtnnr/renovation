@@ -1,0 +1,1774 @@
+{
+  "schema_version": 1,
+  "source": "index.html REGIONS",
+  "generated_at": "2026-07-07T23:16:36.109Z",
+  "units": {
+    "flat": "each",
+    "sqft": "sqft",
+    "beds": "bedroom",
+    "baths": "bathroom",
+    "bedsBaths": "bed+bath",
+    "windows": "window",
+    "sliders": "slider",
+    "roofSquares": "roofing square",
+    "intDoors": "interior door",
+    "frontDoors": "front door",
+    "garageDoors": "garage door",
+    "garages": "garage",
+    "fenceLF": "linear ft",
+    "count": "each"
+  },
+  "regions": {
+    "bayArea": {
+      "label": "Bay Area",
+      "items": [
+        {
+          "id": "MajAmountSeptic",
+          "trade": "Major Systems",
+          "item": "Septic System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSeptic",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountSewer",
+          "trade": "Major Systems",
+          "item": "Sewer Line",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSewer",
+          "critical": true,
+          "options": [
+            {
+              "id": "pos",
+              "label": "POS Requirement",
+              "unit": "each",
+              "unit_cost": 15000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountRoof",
+          "trade": "Major Systems",
+          "item": "Roof",
+          "pricing_type": "pick",
+          "pdf_field": "MajAmountRoof",
+          "critical": true,
+          "options": [
+            {
+              "id": "cert",
+              "label": "Roof cert",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "tearoff",
+              "label": "Tearoff",
+              "unit": "roofing square",
+              "unit_cost": 750,
+              "q": "roofSquares",
+              "default": false,
+              "group": "roofType",
+              "exclusive": true
+            },
+            {
+              "id": "layover",
+              "label": "Layover",
+              "unit": "roofing square",
+              "unit_cost": 500,
+              "q": "roofSquares",
+              "default": false,
+              "group": "roofType",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountHvac",
+          "trade": "Major Systems",
+          "item": "HVAC",
+          "pricing_type": "pick",
+          "pdf_field": "MajAmountHvac",
+          "critical": true,
+          "options": [
+            {
+              "id": "service",
+              "label": "Service",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "cond2",
+              "label": "2 ton condenser",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "cond3",
+              "label": "3 ton condenser",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "furnace",
+              "label": "Furnace",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "wall",
+              "label": "Wall heater",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "duct",
+              "label": "Duct work",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "allnew",
+              "label": "All new",
+              "unit": "each",
+              "unit_cost": 10000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountElectricalPanel",
+          "trade": "Major Systems",
+          "item": "Electrical Panel / System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountElectricalPanel",
+          "critical": true,
+          "options": [
+            {
+              "id": "panel100",
+              "label": "New panel — 100A",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "panel200",
+              "label": "New panel — 200A",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountWaterHeater",
+          "trade": "Major Systems",
+          "item": "Water Heater",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountWaterHeater",
+          "critical": true,
+          "options": [
+            {
+              "id": "replace",
+              "label": "Replace",
+              "unit": "each",
+              "unit_cost": 1500,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountWindow",
+          "trade": "Major Systems",
+          "item": "Windows",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountWindow",
+          "critical": true,
+          "options": [
+            {
+              "id": "win",
+              "label": "Windows",
+              "unit": "window",
+              "unit_cost": 750,
+              "q": "windows",
+              "default": false
+            },
+            {
+              "id": "slider",
+              "label": "Sliders",
+              "unit": "slider",
+              "unit_cost": 1500,
+              "q": "sliders",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountPlumbing",
+          "trade": "Major Systems",
+          "item": "Plumbing System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountPlumbing",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountFoundation",
+          "trade": "Major Systems",
+          "item": "Foundation",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountFoundation",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountSiding",
+          "trade": "Major Systems",
+          "item": "Siding / Stucco",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSiding",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountChimney",
+          "trade": "Major Systems",
+          "item": "Chimney / Fireplace",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountChimney",
+          "critical": true,
+          "options": [
+            {
+              "id": "paint",
+              "label": "Paint",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "tile",
+              "label": "Tile",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountCrawlspace",
+          "trade": "Major Systems",
+          "item": "Crawlspace / Vapor Barrier",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountCrawlspace",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountTermite",
+          "trade": "Major Systems",
+          "item": "Termite / Pest",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountTermite",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountPool",
+          "trade": "Major Systems",
+          "item": "Pool",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountPool",
+          "critical": true,
+          "options": [
+            {
+              "id": "replaster",
+              "label": "Replaster",
+              "unit": "each",
+              "unit_cost": 10000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "equip",
+              "label": "New equipment",
+              "unit": "each",
+              "unit_cost": 8000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "startup",
+              "label": "Startup",
+              "unit": "each",
+              "unit_cost": 1000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountSpa",
+          "trade": "Major Systems",
+          "item": "Spa",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSpa",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountWell",
+          "trade": "Major Systems",
+          "item": "Well",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountWell",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountMisc",
+          "trade": "Major Systems",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountMisc",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "GenAmountBathroom",
+          "trade": "General Rehab",
+          "item": "Bathroom",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountBathroom",
+          "critical": false,
+          "options": [
+            {
+              "id": "full",
+              "label": "Full reno",
+              "unit": "each",
+              "unit_cost": 5500,
+              "q": "count",
+              "default": true
+            },
+            {
+              "id": "custom",
+              "label": "Custom bathroom",
+              "unit": "each",
+              "unit_cost": 7500,
+              "q": "count",
+              "default": false
+            },
+            {
+              "id": "strategic",
+              "label": "Strategic reno",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "count",
+              "default": false
+            },
+            {
+              "id": "mirrors",
+              "label": "Mirrors & lights",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "count",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountDoor",
+          "trade": "General Rehab",
+          "item": "Doors / Hardware",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountDoor",
+          "critical": false,
+          "options": [
+            {
+              "id": "hardware",
+              "label": "Change all hardware",
+              "unit": "interior door",
+              "unit_cost": 50,
+              "q": "intDoors",
+              "default": true
+            },
+            {
+              "id": "paintd",
+              "label": "Paint doors",
+              "unit": "interior door",
+              "unit_cost": 50,
+              "q": "intDoors",
+              "default": true
+            },
+            {
+              "id": "replace",
+              "label": "Replace doors",
+              "unit": "interior door",
+              "unit_cost": 250,
+              "q": "intDoors",
+              "default": false
+            },
+            {
+              "id": "front",
+              "label": "Front door",
+              "unit": "front door",
+              "unit_cost": 1000,
+              "q": "frontDoors",
+              "default": true
+            },
+            {
+              "id": "mirror",
+              "label": "Mirrored sliders",
+              "unit": "bedroom",
+              "unit_cost": 500,
+              "q": "beds",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "GenAmountElectricalFixture",
+          "trade": "General Rehab",
+          "item": "Electrical Fixtures",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountElectricalFixture",
+          "critical": false,
+          "options": [
+            {
+              "id": "all",
+              "label": "Change all in house",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "bedlight",
+              "label": "Add bedroom/bathroom lighting",
+              "unit": "bed+bath",
+              "unit_cost": 250,
+              "q": "bedsBaths",
+              "default": true
+            },
+            {
+              "id": "extlight",
+              "label": "Exterior lighting",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFence",
+          "trade": "General Rehab",
+          "item": "Fences",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountFence",
+          "critical": false,
+          "options": [
+            {
+              "id": "dogear",
+              "label": "Dog ear fencing",
+              "unit": "linear ft",
+              "unit_cost": 50,
+              "q": "fenceLF",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFlooring",
+          "trade": "General Rehab",
+          "item": "Flooring",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountFlooring",
+          "critical": false,
+          "options": [
+            {
+              "id": "lvp",
+              "label": "LVP / base",
+              "unit": "sqft",
+              "unit_cost": 6,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "carpet",
+              "label": "Carpet",
+              "unit": "sqft",
+              "unit_cost": 3,
+              "q": "sqft",
+              "default": false
+            },
+            {
+              "id": "eng",
+              "label": "Engineered / base",
+              "unit": "sqft",
+              "unit_cost": 10,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFraming",
+          "trade": "General Rehab",
+          "item": "Framing / Drywall",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountFraming",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "GenAmountGarage",
+          "trade": "General Rehab",
+          "item": "Garage",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountGarage",
+          "critical": false,
+          "options": [
+            {
+              "id": "single",
+              "label": "Single car door",
+              "unit": "garage door",
+              "unit_cost": 1000,
+              "q": "garageDoors",
+              "default": false
+            },
+            {
+              "id": "double",
+              "label": "Two car door",
+              "unit": "garage door",
+              "unit_cost": 1500,
+              "q": "garageDoors",
+              "default": false
+            },
+            {
+              "id": "motor",
+              "label": "New motor",
+              "unit": "garage",
+              "unit_cost": 500,
+              "q": "garages",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountKitchen",
+          "trade": "General Rehab",
+          "item": "Kitchen",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountKitchen",
+          "critical": false,
+          "options": [
+            {
+              "id": "allnew",
+              "label": "All new",
+              "unit": "each",
+              "unit_cost": 12500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "highend",
+              "label": "All new (high end)",
+              "unit": "each",
+              "unit_cost": 17500,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "counter",
+              "label": "Countertops",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "paint",
+              "label": "Paint",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountLockTrash",
+          "trade": "General Rehab",
+          "item": "Locks / Trash Out / Demo",
+          "pricing_type": "pick",
+          "pdf_field": "GenAmountLockTrash",
+          "critical": false,
+          "options": [
+            {
+              "id": "std",
+              "label": "Standard",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": true,
+              "group": "demo",
+              "exclusive": true
+            },
+            {
+              "id": "med",
+              "label": "Medium",
+              "unit": "each",
+              "unit_cost": 7500,
+              "q": "flat",
+              "default": false,
+              "group": "demo",
+              "exclusive": true
+            },
+            {
+              "id": "heavy",
+              "label": "Heavy",
+              "unit": "each",
+              "unit_cost": 10000,
+              "q": "flat",
+              "default": false,
+              "group": "demo",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "GenAmountMaterial",
+          "trade": "General Rehab",
+          "item": "Materials",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountMaterial",
+          "critical": false,
+          "options": [
+            {
+              "id": "std",
+              "label": "Standard finish",
+              "unit": "each",
+              "unit_cost": 10000,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "big",
+              "label": "Big House finish",
+              "unit": "each",
+              "unit_cost": 15000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountPaint",
+          "trade": "General Rehab",
+          "item": "Paint",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountPaint",
+          "critical": false,
+          "options": [
+            {
+              "id": "int",
+              "label": "Interior",
+              "unit": "sqft",
+              "unit_cost": 3,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "ext",
+              "label": "Exterior",
+              "unit": "sqft",
+              "unit_cost": 3,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "texture",
+              "label": "Texture",
+              "unit": "sqft",
+              "unit_cost": 1.5,
+              "q": "sqft",
+              "default": false
+            },
+            {
+              "id": "popcorn",
+              "label": "Popcorn ceiling scrape",
+              "unit": "sqft",
+              "unit_cost": 1.5,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountPlumbingFixture",
+          "trade": "General Rehab",
+          "item": "Plumbing Fixtures",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountPlumbingFixture",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "GenAmountMisc",
+          "trade": "General Rehab",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountMisc",
+          "critical": false,
+          "options": [
+            {
+              "id": "concrete",
+              "label": "Concrete work",
+              "unit": "sqft",
+              "unit_cost": 20,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "FinAmountAppliance",
+          "trade": "Finishes",
+          "item": "Appliances",
+          "pricing_type": "pick",
+          "pdf_field": "FinAmountAppliance",
+          "critical": false,
+          "options": [
+            {
+              "id": "nofridge",
+              "label": "All new, no fridge",
+              "unit": "each",
+              "unit_cost": 2750,
+              "q": "flat",
+              "default": true,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "fridge",
+              "label": "All new w/ fridge",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "r36",
+              "label": "36\" range w/ fridge",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "r48",
+              "label": "48\" range w/ fridge",
+              "unit": "each",
+              "unit_cost": 6500,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountCleaning",
+          "trade": "Finishes",
+          "item": "Cleaning",
+          "pricing_type": "addon",
+          "pdf_field": "FinAmountCleaning",
+          "critical": false,
+          "options": [
+            {
+              "id": "clean",
+              "label": "Cleaning",
+              "unit": "each",
+              "unit_cost": 800,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountLandscape",
+          "trade": "Finishes",
+          "item": "Landscape",
+          "pricing_type": "line_items",
+          "pdf_field": "FinAmountLandscape",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "FinAmountStaging",
+          "trade": "Finishes",
+          "item": "Staging",
+          "pricing_type": "pick",
+          "pdf_field": "FinAmountStaging",
+          "critical": false,
+          "options": [
+            {
+              "id": "high",
+              "label": "High end",
+              "unit": "each",
+              "unit_cost": 6000,
+              "q": "flat",
+              "default": true,
+              "group": "stage",
+              "exclusive": true
+            },
+            {
+              "id": "cheap",
+              "label": "Cheap",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "stage",
+              "exclusive": true
+            },
+            {
+              "id": "estage",
+              "label": "E-stage",
+              "unit": "each",
+              "unit_cost": 550,
+              "q": "flat",
+              "default": false,
+              "group": "stage",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountMisc",
+          "trade": "Finishes",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "FinAmountMisc",
+          "critical": false,
+          "options": [
+            {
+              "id": "photos",
+              "label": "Photos",
+              "unit": "each",
+              "unit_cost": 300,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "hiphotos",
+              "label": "High end photos",
+              "unit": "each",
+              "unit_cost": 1000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "reports",
+              "label": "Reports",
+              "unit": "each",
+              "unit_cost": 1000,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        }
+      ]
+    },
+    "centralValley": {
+      "label": "Central Valley",
+      "items": [
+        {
+          "id": "MajAmountSeptic",
+          "trade": "Major Systems",
+          "item": "Septic System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSeptic",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountSewer",
+          "trade": "Major Systems",
+          "item": "Sewer Line",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSewer",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountRoof",
+          "trade": "Major Systems",
+          "item": "Roof",
+          "pricing_type": "pick",
+          "pdf_field": "MajAmountRoof",
+          "critical": true,
+          "options": [
+            {
+              "id": "cert",
+              "label": "Roof cert",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "tearoff",
+              "label": "Tearoff",
+              "unit": "roofing square",
+              "unit_cost": 550,
+              "q": "roofSquares",
+              "default": false,
+              "group": "roofType",
+              "exclusive": true
+            },
+            {
+              "id": "layover",
+              "label": "Layover",
+              "unit": "roofing square",
+              "unit_cost": 375,
+              "q": "roofSquares",
+              "default": false,
+              "group": "roofType",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountHvac",
+          "trade": "Major Systems",
+          "item": "HVAC",
+          "pricing_type": "pick",
+          "pdf_field": "MajAmountHvac",
+          "critical": true,
+          "options": [
+            {
+              "id": "service",
+              "label": "Service",
+              "unit": "each",
+              "unit_cost": 375,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "cond2",
+              "label": "2 ton condenser",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "cond3",
+              "label": "3 ton condenser",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "furnace",
+              "label": "Furnace",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "duct",
+              "label": "Duct work",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            },
+            {
+              "id": "allnew",
+              "label": "All new",
+              "unit": "each",
+              "unit_cost": 10000,
+              "q": "flat",
+              "default": false,
+              "group": "hvac",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountElectricalPanel",
+          "trade": "Major Systems",
+          "item": "Electrical Panel / System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountElectricalPanel",
+          "critical": true,
+          "options": [
+            {
+              "id": "panel100",
+              "label": "New panel — 100A",
+              "unit": "each",
+              "unit_cost": 3000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "panel200",
+              "label": "New panel — 200A",
+              "unit": "each",
+              "unit_cost": 3750,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountWaterHeater",
+          "trade": "Major Systems",
+          "item": "Water Heater",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountWaterHeater",
+          "critical": true,
+          "options": [
+            {
+              "id": "replace",
+              "label": "Replace",
+              "unit": "each",
+              "unit_cost": 1500,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "MajAmountWindow",
+          "trade": "Major Systems",
+          "item": "Windows",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountWindow",
+          "critical": true,
+          "options": [
+            {
+              "id": "win",
+              "label": "Windows",
+              "unit": "window",
+              "unit_cost": 500,
+              "q": "windows",
+              "default": false
+            },
+            {
+              "id": "slider",
+              "label": "Sliders",
+              "unit": "slider",
+              "unit_cost": 1000,
+              "q": "sliders",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountPlumbing",
+          "trade": "Major Systems",
+          "item": "Plumbing System",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountPlumbing",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountFoundation",
+          "trade": "Major Systems",
+          "item": "Foundation",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountFoundation",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountSiding",
+          "trade": "Major Systems",
+          "item": "Siding / Stucco",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSiding",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountChimney",
+          "trade": "Major Systems",
+          "item": "Chimney / Fireplace",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountChimney",
+          "critical": true,
+          "options": [
+            {
+              "id": "paint",
+              "label": "Paint",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "tile",
+              "label": "Tile",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountCrawlspace",
+          "trade": "Major Systems",
+          "item": "Crawlspace / Vapor Barrier",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountCrawlspace",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountTermite",
+          "trade": "Major Systems",
+          "item": "Termite / Pest",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountTermite",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountPool",
+          "trade": "Major Systems",
+          "item": "Pool",
+          "pricing_type": "addon",
+          "pdf_field": "MajAmountPool",
+          "critical": true,
+          "options": [
+            {
+              "id": "replaster",
+              "label": "Replaster",
+              "unit": "each",
+              "unit_cost": 9500,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "equip",
+              "label": "New equipment",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "startup",
+              "label": "Startup",
+              "unit": "each",
+              "unit_cost": 1000,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "MajAmountSpa",
+          "trade": "Major Systems",
+          "item": "Spa",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountSpa",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountWell",
+          "trade": "Major Systems",
+          "item": "Well",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountWell",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "MajAmountMisc",
+          "trade": "Major Systems",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "MajAmountMisc",
+          "critical": true,
+          "options": []
+        },
+        {
+          "id": "GenAmountBathroom",
+          "trade": "General Rehab",
+          "item": "Bathroom",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountBathroom",
+          "critical": false,
+          "options": [
+            {
+              "id": "full",
+              "label": "Full reno",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "count",
+              "default": true
+            },
+            {
+              "id": "custom",
+              "label": "Custom bathroom",
+              "unit": "each",
+              "unit_cost": 5500,
+              "q": "count",
+              "default": false
+            },
+            {
+              "id": "strategic",
+              "label": "Strategic reno",
+              "unit": "each",
+              "unit_cost": 1500,
+              "q": "count",
+              "default": false
+            },
+            {
+              "id": "mirrors",
+              "label": "Mirrors & lights",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "count",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountDoor",
+          "trade": "General Rehab",
+          "item": "Doors / Hardware",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountDoor",
+          "critical": false,
+          "options": [
+            {
+              "id": "hardware",
+              "label": "Change all hardware",
+              "unit": "interior door",
+              "unit_cost": 50,
+              "q": "intDoors",
+              "default": true
+            },
+            {
+              "id": "paintd",
+              "label": "Paint doors",
+              "unit": "interior door",
+              "unit_cost": 50,
+              "q": "intDoors",
+              "default": true
+            },
+            {
+              "id": "replace",
+              "label": "Replace doors",
+              "unit": "interior door",
+              "unit_cost": 200,
+              "q": "intDoors",
+              "default": false
+            },
+            {
+              "id": "front",
+              "label": "Front door",
+              "unit": "front door",
+              "unit_cost": 750,
+              "q": "frontDoors",
+              "default": true
+            },
+            {
+              "id": "mirror",
+              "label": "Mirrored sliders",
+              "unit": "bedroom",
+              "unit_cost": 500,
+              "q": "beds",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountElectricalFixture",
+          "trade": "General Rehab",
+          "item": "Electrical Fixtures",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountElectricalFixture",
+          "critical": false,
+          "options": [
+            {
+              "id": "all",
+              "label": "Change all in house",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "bedlight",
+              "label": "Add bedroom/bathroom lighting",
+              "unit": "bed+bath",
+              "unit_cost": 250,
+              "q": "bedsBaths",
+              "default": true
+            },
+            {
+              "id": "extlight",
+              "label": "Exterior lighting",
+              "unit": "each",
+              "unit_cost": 2000,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFence",
+          "trade": "General Rehab",
+          "item": "Fences",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountFence",
+          "critical": false,
+          "options": [
+            {
+              "id": "dogear",
+              "label": "Dog ear fencing",
+              "unit": "linear ft",
+              "unit_cost": 50,
+              "q": "fenceLF",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFlooring",
+          "trade": "General Rehab",
+          "item": "Flooring",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountFlooring",
+          "critical": false,
+          "options": [
+            {
+              "id": "lvp",
+              "label": "LVP / base",
+              "unit": "sqft",
+              "unit_cost": 4.5,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "carpet",
+              "label": "Carpet",
+              "unit": "sqft",
+              "unit_cost": 3,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountFraming",
+          "trade": "General Rehab",
+          "item": "Framing / Drywall",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountFraming",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "GenAmountGarage",
+          "trade": "General Rehab",
+          "item": "Garage",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountGarage",
+          "critical": false,
+          "options": [
+            {
+              "id": "single",
+              "label": "Single car door",
+              "unit": "garage door",
+              "unit_cost": 1000,
+              "q": "garageDoors",
+              "default": false
+            },
+            {
+              "id": "double",
+              "label": "Two car door",
+              "unit": "garage door",
+              "unit_cost": 1500,
+              "q": "garageDoors",
+              "default": false
+            },
+            {
+              "id": "motor",
+              "label": "New motor",
+              "unit": "garage",
+              "unit_cost": 500,
+              "q": "garages",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountKitchen",
+          "trade": "General Rehab",
+          "item": "Kitchen",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountKitchen",
+          "critical": false,
+          "options": [
+            {
+              "id": "allnew",
+              "label": "All new",
+              "unit": "each",
+              "unit_cost": 8500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "counter",
+              "label": "Countertops",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": false
+            },
+            {
+              "id": "paint",
+              "label": "Paint",
+              "unit": "each",
+              "unit_cost": 1500,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountLockTrash",
+          "trade": "General Rehab",
+          "item": "Locks / Trash Out / Demo",
+          "pricing_type": "pick",
+          "pdf_field": "GenAmountLockTrash",
+          "critical": false,
+          "options": [
+            {
+              "id": "std",
+              "label": "Standard",
+              "unit": "each",
+              "unit_cost": 1500,
+              "q": "flat",
+              "default": true,
+              "group": "demo",
+              "exclusive": true
+            },
+            {
+              "id": "med",
+              "label": "Medium",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "demo",
+              "exclusive": true
+            },
+            {
+              "id": "heavy",
+              "label": "Heavy",
+              "unit": "each",
+              "unit_cost": 5500,
+              "q": "flat",
+              "default": false,
+              "group": "demo",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "GenAmountMaterial",
+          "trade": "General Rehab",
+          "item": "Materials",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountMaterial",
+          "critical": false,
+          "options": [
+            {
+              "id": "std",
+              "label": "Standard finish",
+              "unit": "each",
+              "unit_cost": 7500,
+              "q": "flat",
+              "default": true
+            },
+            {
+              "id": "big",
+              "label": "Big House finish",
+              "unit": "each",
+              "unit_cost": 12500,
+              "q": "flat",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountPaint",
+          "trade": "General Rehab",
+          "item": "Paint",
+          "pricing_type": "addon",
+          "pdf_field": "GenAmountPaint",
+          "critical": false,
+          "options": [
+            {
+              "id": "int",
+              "label": "Interior",
+              "unit": "sqft",
+              "unit_cost": 2,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "ext",
+              "label": "Exterior",
+              "unit": "sqft",
+              "unit_cost": 2,
+              "q": "sqft",
+              "default": true
+            },
+            {
+              "id": "texture",
+              "label": "Texture",
+              "unit": "sqft",
+              "unit_cost": 1.5,
+              "q": "sqft",
+              "default": false
+            },
+            {
+              "id": "popcorn",
+              "label": "Popcorn ceiling scrape",
+              "unit": "sqft",
+              "unit_cost": 1.5,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "GenAmountPlumbingFixture",
+          "trade": "General Rehab",
+          "item": "Plumbing Fixtures",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountPlumbingFixture",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "GenAmountMisc",
+          "trade": "General Rehab",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "GenAmountMisc",
+          "critical": false,
+          "options": [
+            {
+              "id": "concrete",
+              "label": "Concrete work",
+              "unit": "sqft",
+              "unit_cost": 15,
+              "q": "sqft",
+              "default": false
+            }
+          ]
+        },
+        {
+          "id": "FinAmountAppliance",
+          "trade": "Finishes",
+          "item": "Appliances",
+          "pricing_type": "pick",
+          "pdf_field": "FinAmountAppliance",
+          "critical": false,
+          "options": [
+            {
+              "id": "nofridge",
+              "label": "All new, no fridge",
+              "unit": "each",
+              "unit_cost": 1850,
+              "q": "flat",
+              "default": true,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "fridge",
+              "label": "All new w/ fridge",
+              "unit": "each",
+              "unit_cost": 3500,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "r36",
+              "label": "36\" range w/ fridge",
+              "unit": "each",
+              "unit_cost": 4000,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            },
+            {
+              "id": "r48",
+              "label": "48\" range w/ fridge",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": false,
+              "group": "appl",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountCleaning",
+          "trade": "Finishes",
+          "item": "Cleaning",
+          "pricing_type": "addon",
+          "pdf_field": "FinAmountCleaning",
+          "critical": false,
+          "options": [
+            {
+              "id": "clean",
+              "label": "Cleaning",
+              "unit": "each",
+              "unit_cost": 500,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountLandscape",
+          "trade": "Finishes",
+          "item": "Landscape",
+          "pricing_type": "line_items",
+          "pdf_field": "FinAmountLandscape",
+          "critical": false,
+          "options": []
+        },
+        {
+          "id": "FinAmountStaging",
+          "trade": "Finishes",
+          "item": "Staging",
+          "pricing_type": "pick",
+          "pdf_field": "FinAmountStaging",
+          "critical": false,
+          "options": [
+            {
+              "id": "high",
+              "label": "High end",
+              "unit": "each",
+              "unit_cost": 5000,
+              "q": "flat",
+              "default": false,
+              "group": "stage",
+              "exclusive": true
+            },
+            {
+              "id": "cheap",
+              "label": "Cheap",
+              "unit": "each",
+              "unit_cost": 2500,
+              "q": "flat",
+              "default": false,
+              "group": "stage",
+              "exclusive": true
+            },
+            {
+              "id": "estage",
+              "label": "E-stage",
+              "unit": "each",
+              "unit_cost": 550,
+              "q": "flat",
+              "default": true,
+              "group": "stage",
+              "exclusive": true
+            }
+          ]
+        },
+        {
+          "id": "FinAmountMisc",
+          "trade": "Finishes",
+          "item": "Miscellaneous",
+          "pricing_type": "line_items",
+          "pdf_field": "FinAmountMisc",
+          "critical": false,
+          "options": [
+            {
+              "id": "photos",
+              "label": "Photos",
+              "unit": "each",
+              "unit_cost": 300,
+              "q": "flat",
+              "default": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

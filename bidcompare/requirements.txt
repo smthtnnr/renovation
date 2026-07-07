@@ -1,0 +1,6 @@
+# Claude passes (extract / map / exclusions) need these.
+# The deterministic passes (taxonomy / variance / calibrate) need only the stdlib.
+anthropic>=0.40
+pydantic>=2
+# Optional: only if you want to run the test suite.
+# pytest>=8

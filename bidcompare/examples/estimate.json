@@ -1,0 +1,11 @@
+{
+  "property": "123 Example St",
+  "region": "bayArea",
+  "items": {
+    "GenAmountKitchen": {"amount": 12500, "scope": "Kitchen — all new"},
+    "GenAmountPaint": {"amount": 6000, "scope": "Interior + exterior paint"},
+    "MajAmountRoof": {"amount": 15000, "scope": "Roof tearoff"},
+    "MajAmountSewer": {"amount": 8000, "scope": "Sewer line replacement"},
+    "GenAmountBathroom": {"amount": 5500, "scope": "1 full bath reno"}
+  }
+}

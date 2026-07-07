@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "contractor": "Acme Builders",
+    "property_address": "123 Example St",
+    "bid_date": "2026-06-01",
+    "bid_total": 97000
+  },
+  "lines": [
+    {"id": "L1", "description": "Kitchen remodel — new cabinets, counters, fixtures",
+     "amount": 16000, "is_lump_sum": false,
+     "quote": "Kitchen remodel including cabinets, countertops and fixtures — $16,000"},
+    {"id": "L2", "description": "Interior and exterior paint",
+     "amount": 4000, "is_lump_sum": false,
+     "quote": "Paint interior and exterior — $4,000"},
+    {"id": "L3", "description": "Roof tearoff and reroof",
+     "amount": 15000, "is_lump_sum": false,
+     "quote": "Tear off existing roof and install new composition shingle — $15,000"},
+    {"id": "L4", "description": "Whole-house finish package (kitchen + baths)",
+     "amount": 42000, "is_lump_sum": true,
+     "quote": "Complete finish package covering kitchen and all bathrooms — $42,000"},
+    {"id": "L5", "description": "Solar panel system",
+     "amount": 20000, "is_lump_sum": false,
+     "quote": "Supply and install 6kW rooftop solar array — $20,000"}
+  ]
+}

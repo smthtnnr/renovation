@@ -1,0 +1,19 @@
+{
+  "mapped": [
+    {"bid_line_id": "L1", "taxonomy_id": "GenAmountKitchen", "confidence": "high",
+     "rationale": "Full kitchen remodel maps to Kitchen."},
+    {"bid_line_id": "L2", "taxonomy_id": "GenAmountPaint", "confidence": "high",
+     "rationale": "Interior + exterior paint maps to Paint."},
+    {"bid_line_id": "L3", "taxonomy_id": "MajAmountRoof", "confidence": "medium",
+     "rationale": "Reroof maps to Roof; confirm tearoff vs layover."}
+  ],
+  "extra": [
+    {"bid_line_id": "L5", "reason": "Solar is not a line item in the estimator taxonomy."}
+  ],
+  "unallocatable": [
+    {"bid_line_id": "L4",
+     "candidate_taxonomy_ids": ["GenAmountKitchen", "GenAmountBathroom"],
+     "reason": "One lump figure bundles kitchen and all bathrooms; cannot be split honestly.",
+     "clarification_question": "Please break out the $42,000 finish package into separate kitchen and bathroom line items."}
+  ]
+}
