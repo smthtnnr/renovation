@@ -196,6 +196,12 @@ function qty(key){
   if(key==="bedsBaths") return qty("beds")+qty("baths");
   const v = parseFloat(prop[key]); return isNaN(v)?0:v;
 }
+// effective qty for an inline addon: a linked option follows its property field
+// (e.g. LVP follows Living sq ft) until the user types a value to override it.
+function inlineQty(st,o){
+  if(o.link && st.qtyLink && st.qtyLink[o.id]) return qty(o.link);
+  return parseFloat(st.qtys[o.id])||0;
+}
 const UNIT_LABEL = {
   flat:"flat", sqft:"/sf", beds:"/bedroom", baths:"/bath", bedsBaths:"/bed+bath", intDoors:"/int door",
   frontDoors:"/front door", windows:"/window", sliders:"/slider",
@@ -275,7 +281,7 @@ const REGIONS = {
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
  {sec:"General Rehab", name:"Flooring", amt:"GenAmountFlooring", cmt:"GenCmtFlooring",
-   addons:[{id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true, inline:true, qlabel:"sqft"},
+   addons:[{id:"lvp", label:"LVP / base", price:6, q:"sqft", def:true, inline:true, qlabel:"sqft", link:"sqft"},
            {id:"carpet", label:"Carpet", price:3, q:"sqft", def:false, inline:true, qlabel:"sqft"},
            {id:"eng", label:"Engineered / base", price:10, q:"sqft", def:false, inline:true, qlabel:"sqft"}]},
  {sec:"General Rehab", name:"Framing / Drywall", amt:"GenAmountFraming", cmt:"GenCmtFraming", lineItems:true},
@@ -389,7 +395,7 @@ const REGIONS = {
  {sec:"General Rehab", name:"Fences", amt:"GenAmountFence", cmt:"GenCmtFence",
    addons:[{id:"dogear", label:"Dog ear fencing", price:50, q:"fenceLF", def:false, inline:true, qlabel:"linear ft"}]},
  {sec:"General Rehab", name:"Flooring", amt:"GenAmountFlooring", cmt:"GenCmtFlooring",
-   addons:[{id:"lvp", label:"LVP / base", price:4.5, q:"sqft", def:true, inline:true, qlabel:"sqft"},
+   addons:[{id:"lvp", label:"LVP / base", price:4.5, q:"sqft", def:true, inline:true, qlabel:"sqft", link:"sqft"},
            {id:"carpet", label:"Carpet", price:3, q:"sqft", def:false, inline:true, qlabel:"sqft"}]},
  {sec:"General Rehab", name:"Framing / Drywall", amt:"GenAmountFraming", cmt:"GenCmtFraming", lineItems:true},
  {sec:"General Rehab", name:"Garage", amt:"GenAmountGarage", cmt:"GenCmtGarage",
@@ -449,8 +455,9 @@ function buildState(){
   SYSTEMS.forEach(s=>{
   const st = {ins:false, cert:false, manualAmt:0, manualCmt:"", addons:{}, picks:{}};
   st.qtys={};
+  st.qtyLink={}; // inline options linked to a property field follow it until manually edited
   if(s.lineItems) st.lines=[{desc:"",amt:""}];
-  (s.addons||[]).forEach(o=>{ st.addons[o.id] = !!o.def; if(o.inline) st.qtys[o.id]=0; });
+  (s.addons||[]).forEach(o=>{ st.addons[o.id] = !!o.def; if(o.inline){ st.qtys[o.id]=0; if(o.link) st.qtyLink[o.id]=true; } });
   (s.picks||[]).forEach(g=>{
     const d = g.opts.find(o=>o.def);
     st.picks[g.id] = d ? d.id : "none";
@@ -482,7 +489,7 @@ function computeSystem(s){
   // addon checkboxes
   (s.addons||[]).forEach(o=>{
     if(st.addons[o.id]){
-      const q = o.inline ? (parseFloat(st.qtys[o.id])||0) : qty(o.q); const line = o.price*q;
+      const q = o.inline ? inlineQty(st,o) : qty(o.q); const line = o.price*q;
       total += line;
       if(line>0) parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${o.inline ? (o.qlabel?" "+o.qlabel:"") : (UNIT_LABEL[o.q]||"")}`);
       else if(o.q!=="flat") parts.push(`${o.label} (0)`);
@@ -597,8 +604,16 @@ function renderSystem(s){
       wrap.appendChild(lab);
       if(o.inline){
         const qi=document.createElement("input"); qi.type="number"; qi.min="0"; qi.step="1";
-        qi.className="qty"; qi.placeholder="0"; qi.value=st.qtys[o.id]||""; qi.title=o.qlabel||"qty";
-        qi.addEventListener("input",()=>{ st.qtys[o.id]=qi.value; if((parseFloat(qi.value)||0)>0){ st.addons[o.id]=true; cb.checked=true; } recompute(); });
+        qi.className="qty"; qi.placeholder="0"; qi.title=o.qlabel||"qty";
+        // linked options (e.g. LVP) show the property field value until overridden
+        qi.value = (o.link && st.qtyLink[o.id]) ? (prop[o.link]||"") : (st.qtys[o.id]||"");
+        if(o.link) qi.dataset.qlink = s.amt+"|"+o.id;
+        qi.addEventListener("input",()=>{
+          if(o.link) st.qtyLink[o.id] = (qi.value===""); // blank re-links to the property field
+          st.qtys[o.id]=qi.value;
+          if((parseFloat(qi.value)||0)>0){ st.addons[o.id]=true; cb.checked=true; }
+          recompute();
+        });
         wrap.appendChild(qi);
         if(o.qlabel){ const u=document.createElement("span"); u.className="unit"; u.textContent=o.qlabel; wrap.appendChild(u); }
       }
@@ -661,8 +676,13 @@ function recompute(){
     if(el){ el.textContent=money(r.amount); el.classList.toggle("zero", r.amount<=0); }
     // per-line costs
     (s.addons||[]).forEach(o=>{
+      // keep a linked inline box (e.g. LVP) showing the property field value until overridden
+      if(o.inline && o.link && state[s.amt].qtyLink[o.id]){
+        const qi=document.querySelector(`input.qty[data-qlink="${CSS.escape(s.amt+"|"+o.id)}"]`);
+        if(qi){ const v=String(prop[o.link]||""); if(qi.value!==v) qi.value=v; }
+      }
       const lc=document.querySelector(`[data-line="${CSS.escape(s.amt+"|"+o.id)}"]`);
-      if(lc){ const q=o.inline ? (parseFloat(state[s.amt].qtys[o.id])||0) : qty(o.q); lc.textContent = state[s.amt].addons[o.id] ? money(o.price*q) : ""; }
+      if(lc){ const q=o.inline ? inlineQty(state[s.amt],o) : qty(o.q); lc.textContent = state[s.amt].addons[o.id] ? money(o.price*q) : ""; }
     });
     (s.picks||[]).forEach(g=>{
       const lc=document.querySelector(`[data-pick="${CSS.escape(g.id)}"]`);
