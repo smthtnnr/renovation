@@ -556,23 +556,9 @@ function renderSystem(s){
   else if(s.picks) tag='<span class="tag pick">pick one</span>';
   nm.innerHTML = s.name+" "+tag;
   const amt=document.createElement("div"); amt.className="sysamt"; amt.dataset.amt=s.amt;
-  // ins/cert
-  let icHtml="";
-  if(s.ins||s.cert){
-    icHtml='<span class="inscert">'+
-      (s.ins?`<label><input type="checkbox" data-ic="ins" ${st.ins?"checked":""}>Ins</label>`:"")+
-      (s.cert?`<label><input type="checkbox" data-ic="cert" ${st.cert?"checked":""}>Cert</label>`:"")+
-      '</span>';
-  }
   row.appendChild(nm);
-  if(icHtml){ const ic=document.createElement("span"); ic.innerHTML=icHtml; ic.style.display="contents"; row.appendChild(ic); }
   row.appendChild(amt);
   box.appendChild(row);
-
-  // ins/cert handlers
-  box.querySelectorAll('[data-ic]').forEach(cb=>{
-    cb.addEventListener("change",()=>{ st[cb.dataset.ic]=cb.checked; });
-  });
 
   // options: pick-one groups + addon checkboxes (rendered first)
   if((s.picks&&s.picks.length)||(s.addons&&s.addons.length)){
