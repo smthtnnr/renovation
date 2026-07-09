@@ -732,32 +732,50 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
     const setText=(name,val)=>{ try{ const f=form.getTextField(name); f.setText(String(val)); }catch(e){} };
     const check=(name,on)=>{ if(!name) return; try{ const f=form.getCheckBox(name); on?f.check():f.uncheck(); }catch(e){} };
 
-    // The PDF's amount/subtotal/total fields carry AFNumber_Format + AFSimple_Calculate
-    // actions, so they re-total live when edited in a PDF viewer. Those scripts parse the
-    // stored field value with AFMakeNumber, which reads a comma as a DECIMAL point — so a
-    // formatted value like "1,500" is misread as 1.5 and every total collapses. Write the
-    // raw number instead; the field's own AFNumber_Format action renders it as $1,500.00.
-    const rawAmt = n => String(Math.round(n));
+    // Money fields are a two-part trick. The PDF's amount/subtotal/total fields carry
+    // AFNumber_Format + AFSimple_Calculate actions so they re-total live when edited in a
+    // viewer, but those calc scripts parse the stored value with AFMakeNumber, which reads a
+    // comma as a DECIMAL point — so a formatted value like "1,500" is misread as 1.5 and
+    // every total collapses. So we store the RAW number (correct math) while baking a
+    // "$1,500.00" appearance (readable in any viewer, including ones that don't run the
+    // format scripts, e.g. macOS Preview): write the formatted string, bake appearances,
+    // then overwrite the stored value with the raw number.
+    const fmtMoney = n => "$"+Math.round(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+    const rawByField = {}; // PDF field name -> raw integer value to store after baking
+
     const t=totals();
     SYSTEMS.forEach(s=>{
       const r=computeSystem(s);
-      if(r.amount>0) setText(s.amt, rawAmt(r.amount));
+      if(r.amount>0){ setText(s.amt, fmtMoney(r.amount)); rawByField[s.amt]=Math.round(r.amount); }
       if(r.comment) setText(s.cmt, r.comment);
       if(state[s.amt].ins) check(s.ins,true);
       if(state[s.amt].cert) check(s.cert,true);
     });
-    setText("MajSubtotal", rawAmt(t["Major Systems"]));
-    setText("GenSubtotal", rawAmt(t["General Rehab"]));
-    setText("FinSubtotal", rawAmt(t["Finishes"]));
-    setText("GrandTotal", rawAmt(t["Major Systems"]+t["General Rehab"]+t["Finishes"]));
+    const rollups = {
+      MajSubtotal: t["Major Systems"], GenSubtotal: t["General Rehab"], FinSubtotal: t["Finishes"],
+      GrandTotal:  t["Major Systems"]+t["General Rehab"]+t["Finishes"],
+    };
+    for(const [name,v] of Object.entries(rollups)){ setText(name, fmtMoney(v)); rawByField[name]=Math.round(v); }
     setText("PropertyAddress", prop.address||"");
     setText("VendorName", prop.vendor||"");
     setText("PropertyId", prop.propId||"");
 
+    // The template only prepends "$" on the subtotal/total fields; give the per-system amount
+    // fields the same currency format so a cell a user edits in a viewer also shows $1,500.00.
+    SYSTEMS.forEach(s=>{ try{
+      const aa=form.getField(s.amt).acroField.dict.lookup(PDFLib.PDFName.of("AA")); if(!aa) return;
+      [["F","AFNumber_Format"],["K","AFNumber_Keystroke"]].forEach(([k,fn])=>{
+        const a=aa.lookup(PDFLib.PDFName.of(k)); if(!a) return;
+        a.set(PDFLib.PDFName.of("JS"), PDFLib.PDFString.of(fn+'(2, 0, 0, 0, "$", true);'));
+      });
+    }catch(e){} });
+
+    // Bake the "$1,500.00" appearances, then swap the stored values back to raw numbers so
+    // the AFSimple_Calculate scripts still add up when the PDF is edited.
     try{ form.updateFieldAppearances(); }catch(e){}
-    // Ask viewers to regenerate field appearances from the raw values, so the
-    // AFNumber_Format actions render amounts as $1,500.00 instead of the raw "1500".
-    try{ form.acroForm.dict.set(PDFLib.PDFName.of("NeedAppearances"), PDFLib.PDFBool.True); }catch(e){}
+    for(const [name,v] of Object.entries(rawByField)){
+      try{ form.getField(name).acroField.dict.set(PDFLib.PDFName.of("V"), PDFLib.PDFString.of(String(v))); }catch(e){}
+    }
     const out = await pdfDoc.save();
     const blob = new Blob([out], {type:"application/pdf"});
     const safe=(prop.address||"budget").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_").slice(0,40);
