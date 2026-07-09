@@ -732,23 +732,32 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
     const setText=(name,val)=>{ try{ const f=form.getTextField(name); f.setText(String(val)); }catch(e){} };
     const check=(name,on)=>{ if(!name) return; try{ const f=form.getCheckBox(name); on?f.check():f.uncheck(); }catch(e){} };
 
+    // The PDF's amount/subtotal/total fields carry AFNumber_Format + AFSimple_Calculate
+    // actions, so they re-total live when edited in a PDF viewer. Those scripts parse the
+    // stored field value with AFMakeNumber, which reads a comma as a DECIMAL point — so a
+    // formatted value like "1,500" is misread as 1.5 and every total collapses. Write the
+    // raw number instead; the field's own AFNumber_Format action renders it as $1,500.00.
+    const rawAmt = n => String(Math.round(n));
     const t=totals();
     SYSTEMS.forEach(s=>{
       const r=computeSystem(s);
-      if(r.amount>0) setText(s.amt, moneyPlain(r.amount));
+      if(r.amount>0) setText(s.amt, rawAmt(r.amount));
       if(r.comment) setText(s.cmt, r.comment);
       if(state[s.amt].ins) check(s.ins,true);
       if(state[s.amt].cert) check(s.cert,true);
     });
-    setText("MajSubtotal", moneyPlain(t["Major Systems"]));
-    setText("GenSubtotal", moneyPlain(t["General Rehab"]));
-    setText("FinSubtotal", moneyPlain(t["Finishes"]));
-    setText("GrandTotal", moneyPlain(t["Major Systems"]+t["General Rehab"]+t["Finishes"]));
+    setText("MajSubtotal", rawAmt(t["Major Systems"]));
+    setText("GenSubtotal", rawAmt(t["General Rehab"]));
+    setText("FinSubtotal", rawAmt(t["Finishes"]));
+    setText("GrandTotal", rawAmt(t["Major Systems"]+t["General Rehab"]+t["Finishes"]));
     setText("PropertyAddress", prop.address||"");
     setText("VendorName", prop.vendor||"");
     setText("PropertyId", prop.propId||"");
 
     try{ form.updateFieldAppearances(); }catch(e){}
+    // Ask viewers to regenerate field appearances from the raw values, so the
+    // AFNumber_Format actions render amounts as $1,500.00 instead of the raw "1500".
+    try{ form.acroForm.dict.set(PDFLib.PDFName.of("NeedAppearances"), PDFLib.PDFBool.True); }catch(e){}
     const out = await pdfDoc.save();
     const blob = new Blob([out], {type:"application/pdf"});
     const safe=(prop.address||"budget").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_").slice(0,40);
