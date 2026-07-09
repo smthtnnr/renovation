@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Reno Budget Estimator — Wedgewood</title>
 <meta name="description" content="Wedgewood renovation budget estimator — fills the standard budget PDF.">
-<meta name="theme-color" content="#234b5c">
+<meta name="theme-color" content="#797468">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,21 +16,28 @@
 <!-- pdf-lib is bundled locally (vendor/) so PDF export works fully offline -->
 <script src="vendor/pdf-lib.min.js"></script>
 <style>
+  @font-face{font-family:"Mulish";font-weight:400;font-style:normal;font-display:swap;src:url("vendor/fonts/mulish-400.woff2") format("woff2")}
+  @font-face{font-family:"Mulish";font-weight:600;font-style:normal;font-display:swap;src:url("vendor/fonts/mulish-600.woff2") format("woff2")}
+  @font-face{font-family:"Mulish";font-weight:700;font-style:normal;font-display:swap;src:url("vendor/fonts/mulish-700.woff2") format("woff2")}
+  @font-face{font-family:"Mulish";font-weight:800;font-style:normal;font-display:swap;src:url("vendor/fonts/mulish-800.woff2") format("woff2")}
   :root{
-    --bg:#eef0f2; --card:#ffffff; --ink:#15191e; --muted:#6b7480;
-    --line:#d7dbe0; --line2:#e7eaee; --accent:#234b5c; --accent2:#2f6275;
-    --good:#1f7a4d; --warn:#9a6b00; --chip:#f1f4f6;
+    /* Wedgewood Homes brand palette */
+    --bg:#ffffff; --card:#ffffff; --ink:#121212; --muted:#797468;
+    --line:#ddd9d5; --line2:#ece9e5; --accent:#797468; --accent2:#e8a446;
+    --orange:#e8a446; --orange-dark:#d89341; --orange-light:#fadbac;
+    --blue:#6b8fa8; --blue-light:#aabfcc;
+    --good:#1f7a4d; --warn:#9a6b00; --chip:#f2eee9;
     --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;
-    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --sans:"Mulish",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
   .wrap{max-width:920px;margin:0 auto;padding:18px 16px 215px}
   header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-  .brand{font-weight:800;letter-spacing:.14em;font-size:15px;color:var(--accent)}
+  .brand{font-weight:800;letter-spacing:.10em;font-size:21px;color:var(--ink)}
   .brand small{display:block;font-weight:600;letter-spacing:.04em;font-size:11px;color:var(--muted);margin-top:2px}
   .addr{text-align:right;font-size:11px;color:var(--muted)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(18,18,18,.06)}
   .card>h2{margin:0;padding:11px 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--accent);display:flex;justify-content:space-between;align-items:center}
   .card>h2 .sub{font-family:var(--mono);font-size:13px;letter-spacing:0;font-weight:600}
   .pad{padding:12px 14px}
@@ -47,7 +54,7 @@
   .opts{margin:8px 0 2px;display:flex;flex-direction:column;gap:7px}
   .opt{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
   .opt label.ol{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;flex:1 0 auto}
-  .opt input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+  .opt input[type=checkbox]{width:16px;height:16px;accent-color:var(--orange);cursor:pointer}
   select{padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-family:var(--sans);font-size:13px;background:#fff;max-width:100%}
   .qty{width:74px!important;padding:5px 7px!important}
   .unit{font-size:11px;color:var(--muted);font-family:var(--mono)}
@@ -63,7 +70,7 @@
   .inscert input{width:14px;height:14px;accent-color:var(--accent2)}
   .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--chip);color:var(--muted)}
   .tag.def{background:#e6f0ea;color:var(--good)}
-  .tag.pick{background:#eef0f7;color:#445}
+  .tag.pick{background:#e6eef2;color:#3c5b6b}
   .tag.man{background:#f4eee2;color:var(--warn)}
   .hint{font-size:11px;color:var(--muted);margin:2px 0 0}
   .linelist{display:flex;flex-direction:column;gap:7px;margin-top:6px}
@@ -71,12 +78,12 @@
   .lirow>input[type=text]{flex:1 1 auto}
   .lirm{flex:0 0 auto;width:30px;height:30px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:6px;cursor:pointer;font-size:17px;line-height:1}
   .lirm:hover{border-color:#b23b30;color:#b23b30}
-  .liadd{margin-top:9px;font-size:12px;font-weight:600;color:var(--accent);background:#eef0f7;border:1px dashed var(--accent);border-radius:7px;padding:7px 12px;cursor:pointer}
-  .liadd:hover{background:#e4e8f3}
+  .liadd{margin-top:9px;font-size:12px;font-weight:600;color:var(--orange-dark);background:#fbead3;border:1px dashed var(--orange);border-radius:7px;padding:7px 12px;cursor:pointer}
+  .liadd:hover{background:#f9e0c2}
   .rcout{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
   .rcout .res{font-size:13px;color:var(--muted)}
-  .rcout .res b{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
-  .rcout button{font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 14px;border-radius:7px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+  .rcout .res b{font-family:var(--mono);font-size:20px;color:var(--orange-dark);font-weight:700}
+  .rcout button{font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 14px;border-radius:7px;border:1px solid var(--orange);background:var(--orange);color:#fff;cursor:pointer}
   .rcout button:hover{filter:brightness(1.1)}
   .rcout button:active{transform:translateY(1px)}
   /* sticky total bar */
@@ -89,21 +96,21 @@
   .grand .val{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.05}
   .actions{display:flex;gap:9px;flex-wrap:wrap}
   button.act{font-family:var(--sans);font-size:13px;font-weight:600;padding:9px 14px;border-radius:7px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;cursor:pointer}
-  button.act.primary{background:#fff;color:var(--accent);border-color:#fff}
+  button.act.primary{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:700}
   button.act:hover{filter:brightness(1.08)}
   button.act:active{transform:translateY(1px)}
   .toast{position:fixed;bottom:132px;left:50%;transform:translateX(-50%);background:#15191e;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:60;pointer-events:none}
   .toast.show{opacity:1}
   .ver{text-align:center;font-size:10px;color:var(--muted);opacity:.55;margin:12px 0 2px;font-family:var(--mono)}
   .region{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-  .region select{font-weight:600;color:var(--accent)}
-  .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;margin-top:4px;display:none}
+  .region select{font-weight:600;color:var(--ink)}
+  .installbtn{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px;border:1px solid var(--orange);background:#fff;color:var(--orange-dark);cursor:pointer;margin-top:4px;display:none}
   .installbtn.show{display:inline-block}
-  .installhint{display:none;align-items:center;gap:10px;background:#eef0f7;border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--ink)}
+  .installhint{display:none;align-items:center;gap:10px;background:#fdf4e7;border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--ink)}
   .installhint.show{display:flex}
   .installhint .ih-ic{flex:none;font-size:15px}
   .installhint .ih-text{flex:1;line-height:1.4}
-  .installhint b{color:var(--accent)}
+  .installhint b{color:var(--orange-dark)}
   .installhint .ih-x{flex:none;background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 2px;line-height:1}
   @media(max-width:560px){.grand .val{font-size:21px}.subs{display:none}.sysname{flex-basis:100%}}
 </style>
@@ -111,7 +118,7 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand">WEDGEWOOD<small>Renovation Budget Estimator</small></div>
+    <div class="brand">WEDGEWOOD HOMES<small>Renovation Budget Estimator</small></div>
     <div class="region">
       <label class="fld" for="regionSel">Pricing region</label>
       <select id="regionSel"></select>
