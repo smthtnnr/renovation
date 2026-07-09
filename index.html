@@ -770,6 +770,10 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
       });
     }catch(e){} });
 
+    // Give the page a column tab order so Enter/Tab walk straight down a column
+    // (spreadsheet-style): type an amount, press Enter, and focus drops to the cell below.
+    try{ pdfDoc.getPages().forEach(pg=> pg.node.set(PDFLib.PDFName.of("Tabs"), PDFLib.PDFName.of("C"))); }catch(e){}
+
     // Bake the "$1,500.00" appearances, then swap the stored values back to raw numbers so
     // the AFSimple_Calculate scripts still add up when the PDF is edited.
     try{ form.updateFieldAppearances(); }catch(e){}
