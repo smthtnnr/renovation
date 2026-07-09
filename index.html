@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Reno Budget Estimator — Wedgewood</title>
 <meta name="description" content="Wedgewood renovation budget estimator — fills the standard budget PDF.">
-<meta name="theme-color" content="#797468">
+<meta name="theme-color" content="#e8a446">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,9 +33,11 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
   .wrap{max-width:920px;margin:0 auto;padding:18px 16px 215px}
-  header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-  .brand{font-weight:800;letter-spacing:.10em;font-size:21px;color:var(--ink)}
-  .brand small{display:block;font-weight:600;letter-spacing:.04em;font-size:11px;color:var(--muted);margin-top:2px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap;background:var(--orange);border-radius:12px;padding:14px 18px;box-shadow:0 1px 3px rgba(18,18,18,.08)}
+  .brandwrap{display:flex;flex-direction:column;gap:4px}
+  .logo{height:46px;width:auto;max-width:100%;display:block}
+  .brandsub{font-size:11px;font-weight:600;letter-spacing:.05em;color:#fff;opacity:.92}
+  header.top .region label.fld{color:#fff;opacity:.95}
   .addr{text-align:right;font-size:11px;color:var(--muted)}
   .card{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(18,18,18,.06)}
   .card>h2{margin:0;padding:11px 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--accent);display:flex;justify-content:space-between;align-items:center}
@@ -118,7 +120,10 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand">WEDGEWOOD HOMES<small>Renovation Budget Estimator</small></div>
+    <div class="brandwrap">
+      <img class="logo" src="assets/wedgewood-logo-white.png" alt="Wedgewood Homes">
+      <div class="brandsub">Renovation Budget Estimator</div>
+    </div>
     <div class="region">
       <label class="fld" for="regionSel">Pricing region</label>
       <select id="regionSel"></select>

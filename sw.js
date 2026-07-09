@@ -12,6 +12,7 @@ const ASSETS = [
   "./vendor/fonts/mulish-600.woff2",
   "./vendor/fonts/mulish-700.woff2",
   "./vendor/fonts/mulish-800.woff2",
+  "./assets/wedgewood-logo-white.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-512-maskable.png",
