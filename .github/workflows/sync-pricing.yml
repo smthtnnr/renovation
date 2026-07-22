@@ -1,13 +1,14 @@
 name: Sync pricing from Google Sheet
 
-# Pulls the published Google Sheet (as CSV), regenerates the app's pricing, and commits
-# to main — which triggers the Pages deploy. Runs on a schedule and can be run on demand
-# from the Actions tab ("Run workflow"). Set the repo variable PRICING_SHEET_CSV_URL to the
-# sheet's "Publish to web → CSV" link; until then the job is a no-op.
+# Pulls the Google Sheet (as CSV), regenerates the app's pricing, and commits to main —
+# which triggers the Pages deploy. Runs daily and can be run on demand from the Actions
+# tab ("Run workflow"). The sheet URL is baked in below; a repo variable named
+# PRICING_SHEET_CSV_URL overrides it if the sheet ever moves. The sheet must be shared
+# "anyone with the link can view".
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # hourly (plus the manual button for instant updates)
+    - cron: "0 14 * * *" # daily at 14:00 UTC (~7am Pacific)
 
 permissions:
   contents: write
@@ -24,13 +25,8 @@ jobs:
 
       - name: Fetch the Google Sheet as CSV
         env:
-          URL: ${{ vars.PRICING_SHEET_CSV_URL }}
+          URL: ${{ vars.PRICING_SHEET_CSV_URL || 'https://docs.google.com/spreadsheets/d/1K0GMvQBXWV9mu1K-4JgyEAKYRcjFSSk_0GRpnjXpEuw/export?format=csv' }}
         run: |
-          if [ -z "$URL" ]; then
-            echo "PRICING_SHEET_CSV_URL is not set — nothing to sync. See docs/PRICING.md."
-            echo "skip=1" >> "$GITHUB_ENV"
-            exit 0
-          fi
           curl -fsSL "$URL" -o pricing/prices.csv
           # sanity-check the download actually looks like our CSV (not an error/login page)
           if ! head -1 pricing/prices.csv | grep -qi 'key' || ! head -1 pricing/prices.csv | grep -qi 'price'; then
@@ -40,16 +36,13 @@ jobs:
           fi
 
       - uses: actions/setup-node@v4
-        if: env.skip != '1'
         with:
           node-version: "20"
 
       - name: Regenerate pricing into the app
-        if: env.skip != '1'
         run: node scripts/build-pricing.mjs
 
       - name: Commit if anything changed
-        if: env.skip != '1'
         run: |
           git config user.name "pricing-sync[bot]"
           git config user.email "pricing-sync@users.noreply.github.com"

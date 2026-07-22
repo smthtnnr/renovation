@@ -8,7 +8,7 @@ PDF**. Works fully offline once installed.
   `REGIONS` block is **generated** (between `PRICING:START`/`PRICING:END`) — don't hand-edit it.
 - **`pricing/pricing.json`, `pricing/prices.csv`** — the pricing data (structure + prices).
 - **`scripts/build-pricing.mjs`** — regenerates the `REGIONS` block from that data.
-- **`.github/workflows/sync-pricing.yml`** — hourly sync from the Google Sheet → see [`docs/PRICING.md`](docs/PRICING.md).
+- **`.github/workflows/sync-pricing.yml`** — daily sync from the Google Sheet → see [`docs/PRICING.md`](docs/PRICING.md).
 - **`vendor/pdf-lib.min.js`** — bundled PDF library (so export works offline).
 - **`manifest.webmanifest`, `sw.js`, `icons/`** — make it installable as an app.
 - **`Budget_Template.pdf`** — the fillable PDF the app populates (embedded in `index.html` as base64; this copy is kept for reference).
@@ -34,7 +34,7 @@ internal web server). On a phone, open the URL and choose **Add to Home Screen**
 
 ## Updating prices
 
-**Prices are edited in a Google Sheet, not in code.** An hourly GitHub Action pulls the
+**Prices are edited in a Google Sheet, not in code.** A daily GitHub Action pulls the
 sheet, regenerates the app, and redeploys. See **[`docs/PRICING.md`](docs/PRICING.md)** for
 the one-time setup and day-to-day flow.
 
@@ -43,7 +43,7 @@ the one-time setup and day-to-day flow.
 - `scripts/build-pricing.mjs` — overlays the CSV prices and regenerates the `REGIONS`
   block in `index.html` (between the `PRICING:START` / `PRICING:END` markers). **Don't edit
   that block by hand — it's generated.**
-- `.github/workflows/sync-pricing.yml` — the hourly / on-demand sync.
+- `.github/workflows/sync-pricing.yml` — the daily / on-demand sync.
 
 ## Adding / changing options (structure)
 
