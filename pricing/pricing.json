@@ -1,0 +1,1595 @@
+{
+  "bayArea": {
+    "label": "Bay Area",
+    "systems": [
+      {
+        "sec": "Major Systems",
+        "name": "Septic System",
+        "amt": "MajAmountSeptic",
+        "cmt": "MajCmtSeptic",
+        "ins": "InspectSeptic",
+        "cert": "CertSeptic",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Sewer Line",
+        "amt": "MajAmountSewer",
+        "cmt": "MajCmtSewer",
+        "ins": "InspectSewer",
+        "cert": "CertSewer",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "pos",
+            "label": "POS Requirement",
+            "price": 15000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Roof",
+        "amt": "MajAmountRoof",
+        "cmt": "MajCmtRoof",
+        "ins": "InspectRoof",
+        "cert": "CertRoof",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "roofType",
+            "label": "Roof work",
+            "none": true,
+            "opts": [
+              {
+                "id": "tearoff",
+                "label": "Tearoff",
+                "price": 750,
+                "q": "roofSquares"
+              },
+              {
+                "id": "layover",
+                "label": "Layover",
+                "price": 500,
+                "q": "roofSquares"
+              }
+            ]
+          }
+        ],
+        "addons": [
+          {
+            "id": "cert",
+            "label": "Roof cert",
+            "price": 2000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "gutters",
+            "label": "New gutters",
+            "price": 2000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "HVAC",
+        "amt": "MajAmountHvac",
+        "cmt": "MajCmtHvac",
+        "ins": "undefined.InspectHvac",
+        "cert": "CertHvac",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "hvac",
+            "label": "HVAC scope",
+            "none": true,
+            "prompt": true,
+            "opts": [
+              {
+                "id": "service",
+                "label": "Service",
+                "price": 2000,
+                "q": "flat"
+              },
+              {
+                "id": "cond2",
+                "label": "2 ton condenser",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "cond3",
+                "label": "3 ton condenser",
+                "price": 4000,
+                "q": "flat"
+              },
+              {
+                "id": "furnace",
+                "label": "Furnace",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "wall",
+                "label": "Wall heater",
+                "price": 2000,
+                "q": "flat"
+              },
+              {
+                "id": "duct",
+                "label": "Duct work",
+                "price": 2500,
+                "q": "flat"
+              },
+              {
+                "id": "allnew",
+                "label": "All new",
+                "price": 10000,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Electrical Panel / System",
+        "amt": "MajAmountElectricalPanel",
+        "cmt": "MajCmtElectricalPanel",
+        "ins": "InspectElectricalPanel",
+        "cert": "CertElectricalPanel",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "panel100",
+            "label": "New panel — 100A",
+            "price": 4000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "panel200",
+            "label": "New panel — 200A",
+            "price": 5000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Water Heater",
+        "amt": "MajAmountWaterHeater",
+        "cmt": "MajCmtWaterHeater",
+        "ins": "undefined.InspectWaterHeater",
+        "cert": "CertWaterHeater",
+        "addons": [
+          {
+            "id": "replace",
+            "label": "Replace",
+            "price": 1500,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Windows",
+        "amt": "MajAmountWindow",
+        "cmt": "MajCmtWindow",
+        "ins": "undefined.InspectWindow",
+        "cert": "CertWindow",
+        "addons": [
+          {
+            "id": "win",
+            "label": "Windows",
+            "price": 750,
+            "q": "windows",
+            "def": false
+          },
+          {
+            "id": "slider",
+            "label": "Sliders",
+            "price": 1500,
+            "q": "sliders",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Plumbing System",
+        "amt": "MajAmountPlumbing",
+        "cmt": "MajCmtPlumbing",
+        "ins": "undefined.InspectPlumbing",
+        "cert": "CertPlumbing",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Foundation",
+        "amt": "MajAmountFoundation",
+        "cmt": "MajCmtFoundation",
+        "ins": "undefined.InspectFoundation",
+        "cert": "CertFoundation",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Siding / Stucco",
+        "amt": "MajAmountSiding",
+        "cmt": "MajCmtSiding",
+        "ins": "InspectSiding",
+        "cert": "CertSiding",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Chimney / Fireplace",
+        "amt": "MajAmountChimney",
+        "cmt": "MajCmtChimney",
+        "ins": "undefined.InspectChimney",
+        "cert": "CertChimney",
+        "addons": [
+          {
+            "id": "paint",
+            "label": "Paint",
+            "price": 500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "tile",
+            "label": "Tile",
+            "price": 2000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Crawlspace / Vapor Barrier",
+        "amt": "MajAmountCrawlspace",
+        "cmt": "MajCmtCrawlspace",
+        "ins": "undefined.InspectCrawlspace",
+        "cert": "CertCrawlspace",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Termite / Pest",
+        "amt": "MajAmountTermite",
+        "cmt": "MajCmtTermite",
+        "ins": "undefined.InspectTermite",
+        "cert": "CertTermite",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Pool",
+        "amt": "MajAmountPool",
+        "cmt": "MajCmtPool",
+        "ins": "undefined.InspectPool",
+        "cert": "CertPool",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "replaster",
+            "label": "Replaster",
+            "price": 10000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "equip",
+            "label": "New equipment",
+            "price": 8000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "startup",
+            "label": "Startup",
+            "price": 1000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Spa",
+        "amt": "MajAmountSpa",
+        "cmt": "MajCmtSpa",
+        "ins": "undefined.InspectSpa",
+        "cert": "CertSpa",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Well",
+        "amt": "MajAmountWell",
+        "cmt": "MajCmtWell",
+        "ins": "undefined.InspectWell",
+        "cert": "CertWell",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Miscellaneous",
+        "amt": "MajAmountMisc",
+        "cmt": "MajCmtMisc",
+        "ins": "undefined.InspectMisc",
+        "cert": "CertMisc",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Bathroom",
+        "amt": "GenAmountBathroom",
+        "cmt": "GenCmtBathroom",
+        "addons": [
+          {
+            "id": "full",
+            "label": "Full reno",
+            "price": 5500,
+            "q": "count",
+            "def": true,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "custom",
+            "label": "Custom bathroom",
+            "price": 7500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "strategic",
+            "label": "Strategic reno",
+            "price": 2500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "mirrors",
+            "label": "Mirrors & lights",
+            "price": 500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Doors / Hardware",
+        "amt": "GenAmountDoor",
+        "cmt": "GenCmtDoor",
+        "addons": [
+          {
+            "id": "hardware",
+            "label": "Change all hardware",
+            "price": 50,
+            "q": "intDoors",
+            "def": true
+          },
+          {
+            "id": "paintd",
+            "label": "Paint doors",
+            "price": 50,
+            "q": "intDoors",
+            "def": true
+          },
+          {
+            "id": "replace",
+            "label": "Replace doors",
+            "price": 250,
+            "q": "intDoors",
+            "def": false
+          },
+          {
+            "id": "front",
+            "label": "Front door",
+            "price": 1000,
+            "q": "frontDoors",
+            "def": true
+          },
+          {
+            "id": "mirror",
+            "label": "Mirrored sliders",
+            "price": 500,
+            "q": "beds",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Electrical Fixtures",
+        "amt": "GenAmountElectricalFixture",
+        "cmt": "GenCmtElectricalFixture",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "all",
+            "label": "Change all in house",
+            "price": 2500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "bedlight",
+            "label": "Add bedroom/bathroom lighting",
+            "price": 250,
+            "q": "bedsBaths",
+            "def": true
+          },
+          {
+            "id": "extlight",
+            "label": "Exterior lighting",
+            "price": 2000,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Fences",
+        "amt": "GenAmountFence",
+        "cmt": "GenCmtFence",
+        "addons": [
+          {
+            "id": "dogear",
+            "label": "Dog ear fencing",
+            "price": 50,
+            "q": "fenceLF",
+            "def": false,
+            "inline": true,
+            "qlabel": "linear ft"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Flooring",
+        "amt": "GenAmountFlooring",
+        "cmt": "GenCmtFlooring",
+        "addons": [
+          {
+            "id": "lvp",
+            "label": "LVP / base",
+            "price": 6,
+            "q": "sqft",
+            "def": true,
+            "inline": true,
+            "qlabel": "sqft",
+            "link": "sqft"
+          },
+          {
+            "id": "carpet",
+            "label": "Carpet",
+            "price": 3,
+            "q": "sqft",
+            "def": false,
+            "inline": true,
+            "qlabel": "sqft"
+          },
+          {
+            "id": "eng",
+            "label": "Engineered / base",
+            "price": 10,
+            "q": "sqft",
+            "def": false,
+            "inline": true,
+            "qlabel": "sqft"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Framing / Drywall",
+        "amt": "GenAmountFraming",
+        "cmt": "GenCmtFraming",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Garage",
+        "amt": "GenAmountGarage",
+        "cmt": "GenCmtGarage",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "single",
+            "label": "Single car door",
+            "price": 1000,
+            "q": "garageDoors",
+            "def": false
+          },
+          {
+            "id": "double",
+            "label": "Two car door",
+            "price": 1500,
+            "q": "garageDoors",
+            "def": false
+          },
+          {
+            "id": "motor",
+            "label": "New motor",
+            "price": 500,
+            "q": "garages",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Kitchen",
+        "amt": "GenAmountKitchen",
+        "cmt": "GenCmtKitchen",
+        "addons": [
+          {
+            "id": "allnew",
+            "label": "All new",
+            "price": 12500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "highend",
+            "label": "All new (high end)",
+            "price": 17500,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "counter",
+            "label": "Countertops",
+            "price": 4000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "paint",
+            "label": "Paint",
+            "price": 2500,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Locks / Trash Out / Demo",
+        "amt": "GenAmountLockTrash",
+        "cmt": "GenCmtLockTrash",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "demo",
+            "label": "Scope",
+            "none": true,
+            "opts": [
+              {
+                "id": "std",
+                "label": "Standard",
+                "price": 5000,
+                "q": "flat",
+                "def": true
+              },
+              {
+                "id": "med",
+                "label": "Medium",
+                "price": 7500,
+                "q": "flat"
+              },
+              {
+                "id": "heavy",
+                "label": "Heavy",
+                "price": 10000,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Materials",
+        "amt": "GenAmountMaterial",
+        "cmt": "GenCmtMaterial",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "std",
+            "label": "Standard finish",
+            "price": 10000,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "big",
+            "label": "Big House finish",
+            "price": 15000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Paint",
+        "amt": "GenAmountPaint",
+        "cmt": "GenCmtPaint",
+        "addons": [
+          {
+            "id": "int",
+            "label": "Interior",
+            "price": 3,
+            "q": "sqft",
+            "def": true
+          },
+          {
+            "id": "ext",
+            "label": "Exterior",
+            "price": 3,
+            "q": "sqft",
+            "def": true
+          },
+          {
+            "id": "texture",
+            "label": "Texture",
+            "price": 1.5,
+            "q": "sqft",
+            "def": false
+          },
+          {
+            "id": "popcorn",
+            "label": "Popcorn ceiling scrape",
+            "price": 1.5,
+            "q": "sqft",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Plumbing Fixtures",
+        "amt": "GenAmountPlumbingFixture",
+        "cmt": "GenCmtPlumbingFixture",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Miscellaneous",
+        "amt": "GenAmountMisc",
+        "cmt": "undefined.GenCmtMisc",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "concrete",
+            "label": "Concrete work",
+            "price": 20,
+            "q": "sqft",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Appliances",
+        "amt": "FinAmountAppliance",
+        "cmt": "FinCmtAppliance",
+        "picks": [
+          {
+            "id": "appl",
+            "label": "Appliance package",
+            "none": true,
+            "opts": [
+              {
+                "id": "nofridge",
+                "label": "All new, no fridge",
+                "price": 2750,
+                "q": "flat",
+                "def": true
+              },
+              {
+                "id": "fridge",
+                "label": "All new w/ fridge",
+                "price": 4000,
+                "q": "flat"
+              },
+              {
+                "id": "r36",
+                "label": "36\" range w/ fridge",
+                "price": 5000,
+                "q": "flat"
+              },
+              {
+                "id": "r48",
+                "label": "48\" range w/ fridge",
+                "price": 6500,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Cleaning",
+        "amt": "FinAmountCleaning",
+        "cmt": "FinCmtCleaning",
+        "addons": [
+          {
+            "id": "clean",
+            "label": "Cleaning",
+            "price": 800,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Landscape",
+        "amt": "FinAmountLandscape",
+        "cmt": "FinCmtLandscape",
+        "lineItems": true
+      },
+      {
+        "sec": "Finishes",
+        "name": "Staging",
+        "amt": "FinAmountStaging",
+        "cmt": "FinCmtStaging",
+        "picks": [
+          {
+            "id": "stage",
+            "label": "Staging",
+            "none": true,
+            "opts": [
+              {
+                "id": "high",
+                "label": "High end",
+                "price": 6000,
+                "q": "flat",
+                "def": true
+              },
+              {
+                "id": "cheap",
+                "label": "Cheap",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "estage",
+                "label": "E-stage",
+                "price": 550,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Miscellaneous",
+        "amt": "FinAmountMisc",
+        "cmt": "undefined.FinCmtMisc",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "photos",
+            "label": "Photos",
+            "price": 300,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "hiphotos",
+            "label": "High end photos",
+            "price": 1000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "reports",
+            "label": "Reports",
+            "price": 1000,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      }
+    ]
+  },
+  "centralValley": {
+    "label": "Central Valley",
+    "systems": [
+      {
+        "sec": "Major Systems",
+        "name": "Septic System",
+        "amt": "MajAmountSeptic",
+        "cmt": "MajCmtSeptic",
+        "ins": "InspectSeptic",
+        "cert": "CertSeptic",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Sewer Line",
+        "amt": "MajAmountSewer",
+        "cmt": "MajCmtSewer",
+        "ins": "InspectSewer",
+        "cert": "CertSewer",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Roof",
+        "amt": "MajAmountRoof",
+        "cmt": "MajCmtRoof",
+        "ins": "InspectRoof",
+        "cert": "CertRoof",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "roofType",
+            "label": "Roof work",
+            "none": true,
+            "opts": [
+              {
+                "id": "tearoff",
+                "label": "Tearoff",
+                "price": 550,
+                "q": "roofSquares"
+              },
+              {
+                "id": "layover",
+                "label": "Layover",
+                "price": 375,
+                "q": "roofSquares"
+              }
+            ]
+          }
+        ],
+        "addons": [
+          {
+            "id": "cert",
+            "label": "Roof cert",
+            "price": 500,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "gutters",
+            "label": "New gutters",
+            "price": 2000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "HVAC",
+        "amt": "MajAmountHvac",
+        "cmt": "MajCmtHvac",
+        "ins": "undefined.InspectHvac",
+        "cert": "CertHvac",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "hvac",
+            "label": "HVAC scope",
+            "none": true,
+            "prompt": true,
+            "opts": [
+              {
+                "id": "service",
+                "label": "Service",
+                "price": 375,
+                "q": "flat"
+              },
+              {
+                "id": "cond2",
+                "label": "2 ton condenser",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "cond3",
+                "label": "3 ton condenser",
+                "price": 4000,
+                "q": "flat"
+              },
+              {
+                "id": "furnace",
+                "label": "Furnace",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "duct",
+                "label": "Duct work",
+                "price": 2500,
+                "q": "flat"
+              },
+              {
+                "id": "allnew",
+                "label": "All new",
+                "price": 10000,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Electrical Panel / System",
+        "amt": "MajAmountElectricalPanel",
+        "cmt": "MajCmtElectricalPanel",
+        "ins": "InspectElectricalPanel",
+        "cert": "CertElectricalPanel",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "panel100",
+            "label": "New panel — 100A",
+            "price": 3000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "panel200",
+            "label": "New panel — 200A",
+            "price": 3750,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Water Heater",
+        "amt": "MajAmountWaterHeater",
+        "cmt": "MajCmtWaterHeater",
+        "ins": "undefined.InspectWaterHeater",
+        "cert": "CertWaterHeater",
+        "addons": [
+          {
+            "id": "replace",
+            "label": "Replace",
+            "price": 1500,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Windows",
+        "amt": "MajAmountWindow",
+        "cmt": "MajCmtWindow",
+        "ins": "undefined.InspectWindow",
+        "cert": "CertWindow",
+        "addons": [
+          {
+            "id": "win",
+            "label": "Windows",
+            "price": 500,
+            "q": "windows",
+            "def": false
+          },
+          {
+            "id": "slider",
+            "label": "Sliders",
+            "price": 1000,
+            "q": "sliders",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Plumbing System",
+        "amt": "MajAmountPlumbing",
+        "cmt": "MajCmtPlumbing",
+        "ins": "undefined.InspectPlumbing",
+        "cert": "CertPlumbing",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Foundation",
+        "amt": "MajAmountFoundation",
+        "cmt": "MajCmtFoundation",
+        "ins": "undefined.InspectFoundation",
+        "cert": "CertFoundation",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Siding / Stucco",
+        "amt": "MajAmountSiding",
+        "cmt": "MajCmtSiding",
+        "ins": "InspectSiding",
+        "cert": "CertSiding",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Chimney / Fireplace",
+        "amt": "MajAmountChimney",
+        "cmt": "MajCmtChimney",
+        "ins": "undefined.InspectChimney",
+        "cert": "CertChimney",
+        "addons": [
+          {
+            "id": "paint",
+            "label": "Paint",
+            "price": 500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "tile",
+            "label": "Tile",
+            "price": 2000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Crawlspace / Vapor Barrier",
+        "amt": "MajAmountCrawlspace",
+        "cmt": "MajCmtCrawlspace",
+        "ins": "undefined.InspectCrawlspace",
+        "cert": "CertCrawlspace",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Termite / Pest",
+        "amt": "MajAmountTermite",
+        "cmt": "MajCmtTermite",
+        "ins": "undefined.InspectTermite",
+        "cert": "CertTermite",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Pool",
+        "amt": "MajAmountPool",
+        "cmt": "MajCmtPool",
+        "ins": "undefined.InspectPool",
+        "cert": "CertPool",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "replaster",
+            "label": "Replaster",
+            "price": 9500,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "equip",
+            "label": "New equipment",
+            "price": 5000,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "startup",
+            "label": "Startup",
+            "price": 1000,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Spa",
+        "amt": "MajAmountSpa",
+        "cmt": "MajCmtSpa",
+        "ins": "undefined.InspectSpa",
+        "cert": "CertSpa",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Well",
+        "amt": "MajAmountWell",
+        "cmt": "MajCmtWell",
+        "ins": "undefined.InspectWell",
+        "cert": "CertWell",
+        "lineItems": true
+      },
+      {
+        "sec": "Major Systems",
+        "name": "Miscellaneous",
+        "amt": "MajAmountMisc",
+        "cmt": "MajCmtMisc",
+        "ins": "undefined.InspectMisc",
+        "cert": "CertMisc",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Bathroom",
+        "amt": "GenAmountBathroom",
+        "cmt": "GenCmtBathroom",
+        "addons": [
+          {
+            "id": "full",
+            "label": "Full reno",
+            "price": 3500,
+            "q": "count",
+            "def": true,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "custom",
+            "label": "Custom bathroom",
+            "price": 5500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "strategic",
+            "label": "Strategic reno",
+            "price": 1500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          },
+          {
+            "id": "mirrors",
+            "label": "Mirrors & lights",
+            "price": 500,
+            "q": "count",
+            "def": false,
+            "inline": true,
+            "qlabel": "baths"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Doors / Hardware",
+        "amt": "GenAmountDoor",
+        "cmt": "GenCmtDoor",
+        "addons": [
+          {
+            "id": "hardware",
+            "label": "Change all hardware",
+            "price": 50,
+            "q": "intDoors",
+            "def": true
+          },
+          {
+            "id": "paintd",
+            "label": "Paint doors",
+            "price": 50,
+            "q": "intDoors",
+            "def": true
+          },
+          {
+            "id": "replace",
+            "label": "Replace doors",
+            "price": 200,
+            "q": "intDoors",
+            "def": false
+          },
+          {
+            "id": "front",
+            "label": "Front door",
+            "price": 750,
+            "q": "frontDoors",
+            "def": true
+          },
+          {
+            "id": "mirror",
+            "label": "Mirrored sliders",
+            "price": 500,
+            "q": "beds",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Electrical Fixtures",
+        "amt": "GenAmountElectricalFixture",
+        "cmt": "GenCmtElectricalFixture",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "all",
+            "label": "Change all in house",
+            "price": 2500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "bedlight",
+            "label": "Add bedroom/bathroom lighting",
+            "price": 250,
+            "q": "bedsBaths",
+            "def": true
+          },
+          {
+            "id": "extlight",
+            "label": "Exterior lighting",
+            "price": 2000,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Fences",
+        "amt": "GenAmountFence",
+        "cmt": "GenCmtFence",
+        "addons": [
+          {
+            "id": "dogear",
+            "label": "Dog ear fencing",
+            "price": 50,
+            "q": "fenceLF",
+            "def": false,
+            "inline": true,
+            "qlabel": "linear ft"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Flooring",
+        "amt": "GenAmountFlooring",
+        "cmt": "GenCmtFlooring",
+        "addons": [
+          {
+            "id": "lvp",
+            "label": "LVP / base",
+            "price": 4.5,
+            "q": "sqft",
+            "def": true,
+            "inline": true,
+            "qlabel": "sqft",
+            "link": "sqft"
+          },
+          {
+            "id": "carpet",
+            "label": "Carpet",
+            "price": 3,
+            "q": "sqft",
+            "def": false,
+            "inline": true,
+            "qlabel": "sqft"
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Framing / Drywall",
+        "amt": "GenAmountFraming",
+        "cmt": "GenCmtFraming",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Garage",
+        "amt": "GenAmountGarage",
+        "cmt": "GenCmtGarage",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "single",
+            "label": "Single car door",
+            "price": 1000,
+            "q": "garageDoors",
+            "def": false
+          },
+          {
+            "id": "double",
+            "label": "Two car door",
+            "price": 1500,
+            "q": "garageDoors",
+            "def": false
+          },
+          {
+            "id": "motor",
+            "label": "New motor",
+            "price": 500,
+            "q": "garages",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Kitchen",
+        "amt": "GenAmountKitchen",
+        "cmt": "GenCmtKitchen",
+        "addons": [
+          {
+            "id": "allnew",
+            "label": "All new",
+            "price": 8500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "counter",
+            "label": "Countertops",
+            "price": 2500,
+            "q": "flat",
+            "def": false
+          },
+          {
+            "id": "paint",
+            "label": "Paint",
+            "price": 1500,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Locks / Trash Out / Demo",
+        "amt": "GenAmountLockTrash",
+        "cmt": "GenCmtLockTrash",
+        "lineItems": true,
+        "picks": [
+          {
+            "id": "demo",
+            "label": "Scope",
+            "none": true,
+            "opts": [
+              {
+                "id": "std",
+                "label": "Standard",
+                "price": 1500,
+                "q": "flat",
+                "def": true
+              },
+              {
+                "id": "med",
+                "label": "Medium",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "heavy",
+                "label": "Heavy",
+                "price": 5500,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Materials",
+        "amt": "GenAmountMaterial",
+        "cmt": "GenCmtMaterial",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "std",
+            "label": "Standard finish",
+            "price": 7500,
+            "q": "flat",
+            "def": true
+          },
+          {
+            "id": "big",
+            "label": "Big House finish",
+            "price": 12500,
+            "q": "flat",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Paint",
+        "amt": "GenAmountPaint",
+        "cmt": "GenCmtPaint",
+        "addons": [
+          {
+            "id": "int",
+            "label": "Interior",
+            "price": 2,
+            "q": "sqft",
+            "def": true
+          },
+          {
+            "id": "ext",
+            "label": "Exterior",
+            "price": 2,
+            "q": "sqft",
+            "def": true
+          },
+          {
+            "id": "texture",
+            "label": "Texture",
+            "price": 1.5,
+            "q": "sqft",
+            "def": false
+          },
+          {
+            "id": "popcorn",
+            "label": "Popcorn ceiling scrape",
+            "price": 1.5,
+            "q": "sqft",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Plumbing Fixtures",
+        "amt": "GenAmountPlumbingFixture",
+        "cmt": "GenCmtPlumbingFixture",
+        "lineItems": true
+      },
+      {
+        "sec": "General Rehab",
+        "name": "Miscellaneous",
+        "amt": "GenAmountMisc",
+        "cmt": "undefined.GenCmtMisc",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "concrete",
+            "label": "Concrete work",
+            "price": 15,
+            "q": "sqft",
+            "def": false
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Appliances",
+        "amt": "FinAmountAppliance",
+        "cmt": "FinCmtAppliance",
+        "picks": [
+          {
+            "id": "appl",
+            "label": "Appliance package",
+            "none": true,
+            "opts": [
+              {
+                "id": "nofridge",
+                "label": "All new, no fridge",
+                "price": 1850,
+                "q": "flat",
+                "def": true
+              },
+              {
+                "id": "fridge",
+                "label": "All new w/ fridge",
+                "price": 3500,
+                "q": "flat"
+              },
+              {
+                "id": "r36",
+                "label": "36\" range w/ fridge",
+                "price": 4000,
+                "q": "flat"
+              },
+              {
+                "id": "r48",
+                "label": "48\" range w/ fridge",
+                "price": 5000,
+                "q": "flat"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Cleaning",
+        "amt": "FinAmountCleaning",
+        "cmt": "FinCmtCleaning",
+        "addons": [
+          {
+            "id": "clean",
+            "label": "Cleaning",
+            "price": 500,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Landscape",
+        "amt": "FinAmountLandscape",
+        "cmt": "FinCmtLandscape",
+        "lineItems": true
+      },
+      {
+        "sec": "Finishes",
+        "name": "Staging",
+        "amt": "FinAmountStaging",
+        "cmt": "FinCmtStaging",
+        "picks": [
+          {
+            "id": "stage",
+            "label": "Staging",
+            "none": true,
+            "opts": [
+              {
+                "id": "high",
+                "label": "High end",
+                "price": 5000,
+                "q": "flat"
+              },
+              {
+                "id": "cheap",
+                "label": "Cheap",
+                "price": 2500,
+                "q": "flat"
+              },
+              {
+                "id": "estage",
+                "label": "E-stage",
+                "price": 550,
+                "q": "flat",
+                "def": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sec": "Finishes",
+        "name": "Miscellaneous",
+        "amt": "FinAmountMisc",
+        "cmt": "undefined.FinCmtMisc",
+        "lineItems": true,
+        "addons": [
+          {
+            "id": "photos",
+            "label": "Photos",
+            "price": 300,
+            "q": "flat",
+            "def": true
+          }
+        ]
+      }
+    ]
+  }
+}

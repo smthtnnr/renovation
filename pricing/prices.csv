@@ -1,0 +1,127 @@
+key,region,section,system,option,unit,price
+bayArea|MajAmountSewer|addon||pos,Bay Area,Major Systems,Sewer Line,POS Requirement,flat,15000
+bayArea|MajAmountRoof|pick|roofType|tearoff,Bay Area,Major Systems,Roof,Tearoff,roofSquares,750
+bayArea|MajAmountRoof|pick|roofType|layover,Bay Area,Major Systems,Roof,Layover,roofSquares,500
+bayArea|MajAmountRoof|addon||cert,Bay Area,Major Systems,Roof,Roof cert,flat,2000
+bayArea|MajAmountRoof|addon||gutters,Bay Area,Major Systems,Roof,New gutters,flat,2000
+bayArea|MajAmountHvac|pick|hvac|service,Bay Area,Major Systems,HVAC,Service,flat,2000
+bayArea|MajAmountHvac|pick|hvac|cond2,Bay Area,Major Systems,HVAC,2 ton condenser,flat,3500
+bayArea|MajAmountHvac|pick|hvac|cond3,Bay Area,Major Systems,HVAC,3 ton condenser,flat,4000
+bayArea|MajAmountHvac|pick|hvac|furnace,Bay Area,Major Systems,HVAC,Furnace,flat,3500
+bayArea|MajAmountHvac|pick|hvac|wall,Bay Area,Major Systems,HVAC,Wall heater,flat,2000
+bayArea|MajAmountHvac|pick|hvac|duct,Bay Area,Major Systems,HVAC,Duct work,flat,2500
+bayArea|MajAmountHvac|pick|hvac|allnew,Bay Area,Major Systems,HVAC,All new,flat,10000
+bayArea|MajAmountElectricalPanel|addon||panel100,Bay Area,Major Systems,Electrical Panel / System,New panel — 100A,flat,4000
+bayArea|MajAmountElectricalPanel|addon||panel200,Bay Area,Major Systems,Electrical Panel / System,New panel — 200A,flat,5000
+bayArea|MajAmountWaterHeater|addon||replace,Bay Area,Major Systems,Water Heater,Replace,flat,1500
+bayArea|MajAmountWindow|addon||win,Bay Area,Major Systems,Windows,Windows,windows,750
+bayArea|MajAmountWindow|addon||slider,Bay Area,Major Systems,Windows,Sliders,sliders,1500
+bayArea|MajAmountChimney|addon||paint,Bay Area,Major Systems,Chimney / Fireplace,Paint,flat,500
+bayArea|MajAmountChimney|addon||tile,Bay Area,Major Systems,Chimney / Fireplace,Tile,flat,2000
+bayArea|MajAmountPool|addon||replaster,Bay Area,Major Systems,Pool,Replaster,flat,10000
+bayArea|MajAmountPool|addon||equip,Bay Area,Major Systems,Pool,New equipment,flat,8000
+bayArea|MajAmountPool|addon||startup,Bay Area,Major Systems,Pool,Startup,flat,1000
+bayArea|GenAmountBathroom|addon||full,Bay Area,General Rehab,Bathroom,Full reno,count,5500
+bayArea|GenAmountBathroom|addon||custom,Bay Area,General Rehab,Bathroom,Custom bathroom,count,7500
+bayArea|GenAmountBathroom|addon||strategic,Bay Area,General Rehab,Bathroom,Strategic reno,count,2500
+bayArea|GenAmountBathroom|addon||mirrors,Bay Area,General Rehab,Bathroom,Mirrors & lights,count,500
+bayArea|GenAmountDoor|addon||hardware,Bay Area,General Rehab,Doors / Hardware,Change all hardware,intDoors,50
+bayArea|GenAmountDoor|addon||paintd,Bay Area,General Rehab,Doors / Hardware,Paint doors,intDoors,50
+bayArea|GenAmountDoor|addon||replace,Bay Area,General Rehab,Doors / Hardware,Replace doors,intDoors,250
+bayArea|GenAmountDoor|addon||front,Bay Area,General Rehab,Doors / Hardware,Front door,frontDoors,1000
+bayArea|GenAmountDoor|addon||mirror,Bay Area,General Rehab,Doors / Hardware,Mirrored sliders,beds,500
+bayArea|GenAmountElectricalFixture|addon||all,Bay Area,General Rehab,Electrical Fixtures,Change all in house,flat,2500
+bayArea|GenAmountElectricalFixture|addon||bedlight,Bay Area,General Rehab,Electrical Fixtures,Add bedroom/bathroom lighting,bedsBaths,250
+bayArea|GenAmountElectricalFixture|addon||extlight,Bay Area,General Rehab,Electrical Fixtures,Exterior lighting,flat,2000
+bayArea|GenAmountFence|addon||dogear,Bay Area,General Rehab,Fences,Dog ear fencing,fenceLF,50
+bayArea|GenAmountFlooring|addon||lvp,Bay Area,General Rehab,Flooring,LVP / base,sqft,6
+bayArea|GenAmountFlooring|addon||carpet,Bay Area,General Rehab,Flooring,Carpet,sqft,3
+bayArea|GenAmountFlooring|addon||eng,Bay Area,General Rehab,Flooring,Engineered / base,sqft,10
+bayArea|GenAmountGarage|addon||single,Bay Area,General Rehab,Garage,Single car door,garageDoors,1000
+bayArea|GenAmountGarage|addon||double,Bay Area,General Rehab,Garage,Two car door,garageDoors,1500
+bayArea|GenAmountGarage|addon||motor,Bay Area,General Rehab,Garage,New motor,garages,500
+bayArea|GenAmountKitchen|addon||allnew,Bay Area,General Rehab,Kitchen,All new,flat,12500
+bayArea|GenAmountKitchen|addon||highend,Bay Area,General Rehab,Kitchen,All new (high end),flat,17500
+bayArea|GenAmountKitchen|addon||counter,Bay Area,General Rehab,Kitchen,Countertops,flat,4000
+bayArea|GenAmountKitchen|addon||paint,Bay Area,General Rehab,Kitchen,Paint,flat,2500
+bayArea|GenAmountLockTrash|pick|demo|std,Bay Area,General Rehab,Locks / Trash Out / Demo,Standard,flat,5000
+bayArea|GenAmountLockTrash|pick|demo|med,Bay Area,General Rehab,Locks / Trash Out / Demo,Medium,flat,7500
+bayArea|GenAmountLockTrash|pick|demo|heavy,Bay Area,General Rehab,Locks / Trash Out / Demo,Heavy,flat,10000
+bayArea|GenAmountMaterial|addon||std,Bay Area,General Rehab,Materials,Standard finish,flat,10000
+bayArea|GenAmountMaterial|addon||big,Bay Area,General Rehab,Materials,Big House finish,flat,15000
+bayArea|GenAmountPaint|addon||int,Bay Area,General Rehab,Paint,Interior,sqft,3
+bayArea|GenAmountPaint|addon||ext,Bay Area,General Rehab,Paint,Exterior,sqft,3
+bayArea|GenAmountPaint|addon||texture,Bay Area,General Rehab,Paint,Texture,sqft,1.5
+bayArea|GenAmountPaint|addon||popcorn,Bay Area,General Rehab,Paint,Popcorn ceiling scrape,sqft,1.5
+bayArea|GenAmountMisc|addon||concrete,Bay Area,General Rehab,Miscellaneous,Concrete work,sqft,20
+bayArea|FinAmountAppliance|pick|appl|nofridge,Bay Area,Finishes,Appliances,"All new, no fridge",flat,2750
+bayArea|FinAmountAppliance|pick|appl|fridge,Bay Area,Finishes,Appliances,All new w/ fridge,flat,4000
+bayArea|FinAmountAppliance|pick|appl|r36,Bay Area,Finishes,Appliances,"36"" range w/ fridge",flat,5000
+bayArea|FinAmountAppliance|pick|appl|r48,Bay Area,Finishes,Appliances,"48"" range w/ fridge",flat,6500
+bayArea|FinAmountCleaning|addon||clean,Bay Area,Finishes,Cleaning,Cleaning,flat,800
+bayArea|FinAmountStaging|pick|stage|high,Bay Area,Finishes,Staging,High end,flat,6000
+bayArea|FinAmountStaging|pick|stage|cheap,Bay Area,Finishes,Staging,Cheap,flat,3500
+bayArea|FinAmountStaging|pick|stage|estage,Bay Area,Finishes,Staging,E-stage,flat,550
+bayArea|FinAmountMisc|addon||photos,Bay Area,Finishes,Miscellaneous,Photos,flat,300
+bayArea|FinAmountMisc|addon||hiphotos,Bay Area,Finishes,Miscellaneous,High end photos,flat,1000
+bayArea|FinAmountMisc|addon||reports,Bay Area,Finishes,Miscellaneous,Reports,flat,1000
+centralValley|MajAmountRoof|pick|roofType|tearoff,Central Valley,Major Systems,Roof,Tearoff,roofSquares,550
+centralValley|MajAmountRoof|pick|roofType|layover,Central Valley,Major Systems,Roof,Layover,roofSquares,375
+centralValley|MajAmountRoof|addon||cert,Central Valley,Major Systems,Roof,Roof cert,flat,500
+centralValley|MajAmountRoof|addon||gutters,Central Valley,Major Systems,Roof,New gutters,flat,2000
+centralValley|MajAmountHvac|pick|hvac|service,Central Valley,Major Systems,HVAC,Service,flat,375
+centralValley|MajAmountHvac|pick|hvac|cond2,Central Valley,Major Systems,HVAC,2 ton condenser,flat,3500
+centralValley|MajAmountHvac|pick|hvac|cond3,Central Valley,Major Systems,HVAC,3 ton condenser,flat,4000
+centralValley|MajAmountHvac|pick|hvac|furnace,Central Valley,Major Systems,HVAC,Furnace,flat,3500
+centralValley|MajAmountHvac|pick|hvac|duct,Central Valley,Major Systems,HVAC,Duct work,flat,2500
+centralValley|MajAmountHvac|pick|hvac|allnew,Central Valley,Major Systems,HVAC,All new,flat,10000
+centralValley|MajAmountElectricalPanel|addon||panel100,Central Valley,Major Systems,Electrical Panel / System,New panel — 100A,flat,3000
+centralValley|MajAmountElectricalPanel|addon||panel200,Central Valley,Major Systems,Electrical Panel / System,New panel — 200A,flat,3750
+centralValley|MajAmountWaterHeater|addon||replace,Central Valley,Major Systems,Water Heater,Replace,flat,1500
+centralValley|MajAmountWindow|addon||win,Central Valley,Major Systems,Windows,Windows,windows,500
+centralValley|MajAmountWindow|addon||slider,Central Valley,Major Systems,Windows,Sliders,sliders,1000
+centralValley|MajAmountChimney|addon||paint,Central Valley,Major Systems,Chimney / Fireplace,Paint,flat,500
+centralValley|MajAmountChimney|addon||tile,Central Valley,Major Systems,Chimney / Fireplace,Tile,flat,2000
+centralValley|MajAmountPool|addon||replaster,Central Valley,Major Systems,Pool,Replaster,flat,9500
+centralValley|MajAmountPool|addon||equip,Central Valley,Major Systems,Pool,New equipment,flat,5000
+centralValley|MajAmountPool|addon||startup,Central Valley,Major Systems,Pool,Startup,flat,1000
+centralValley|GenAmountBathroom|addon||full,Central Valley,General Rehab,Bathroom,Full reno,count,3500
+centralValley|GenAmountBathroom|addon||custom,Central Valley,General Rehab,Bathroom,Custom bathroom,count,5500
+centralValley|GenAmountBathroom|addon||strategic,Central Valley,General Rehab,Bathroom,Strategic reno,count,1500
+centralValley|GenAmountBathroom|addon||mirrors,Central Valley,General Rehab,Bathroom,Mirrors & lights,count,500
+centralValley|GenAmountDoor|addon||hardware,Central Valley,General Rehab,Doors / Hardware,Change all hardware,intDoors,50
+centralValley|GenAmountDoor|addon||paintd,Central Valley,General Rehab,Doors / Hardware,Paint doors,intDoors,50
+centralValley|GenAmountDoor|addon||replace,Central Valley,General Rehab,Doors / Hardware,Replace doors,intDoors,200
+centralValley|GenAmountDoor|addon||front,Central Valley,General Rehab,Doors / Hardware,Front door,frontDoors,750
+centralValley|GenAmountDoor|addon||mirror,Central Valley,General Rehab,Doors / Hardware,Mirrored sliders,beds,500
+centralValley|GenAmountElectricalFixture|addon||all,Central Valley,General Rehab,Electrical Fixtures,Change all in house,flat,2500
+centralValley|GenAmountElectricalFixture|addon||bedlight,Central Valley,General Rehab,Electrical Fixtures,Add bedroom/bathroom lighting,bedsBaths,250
+centralValley|GenAmountElectricalFixture|addon||extlight,Central Valley,General Rehab,Electrical Fixtures,Exterior lighting,flat,2000
+centralValley|GenAmountFence|addon||dogear,Central Valley,General Rehab,Fences,Dog ear fencing,fenceLF,50
+centralValley|GenAmountFlooring|addon||lvp,Central Valley,General Rehab,Flooring,LVP / base,sqft,4.5
+centralValley|GenAmountFlooring|addon||carpet,Central Valley,General Rehab,Flooring,Carpet,sqft,3
+centralValley|GenAmountGarage|addon||single,Central Valley,General Rehab,Garage,Single car door,garageDoors,1000
+centralValley|GenAmountGarage|addon||double,Central Valley,General Rehab,Garage,Two car door,garageDoors,1500
+centralValley|GenAmountGarage|addon||motor,Central Valley,General Rehab,Garage,New motor,garages,500
+centralValley|GenAmountKitchen|addon||allnew,Central Valley,General Rehab,Kitchen,All new,flat,8500
+centralValley|GenAmountKitchen|addon||counter,Central Valley,General Rehab,Kitchen,Countertops,flat,2500
+centralValley|GenAmountKitchen|addon||paint,Central Valley,General Rehab,Kitchen,Paint,flat,1500
+centralValley|GenAmountLockTrash|pick|demo|std,Central Valley,General Rehab,Locks / Trash Out / Demo,Standard,flat,1500
+centralValley|GenAmountLockTrash|pick|demo|med,Central Valley,General Rehab,Locks / Trash Out / Demo,Medium,flat,3500
+centralValley|GenAmountLockTrash|pick|demo|heavy,Central Valley,General Rehab,Locks / Trash Out / Demo,Heavy,flat,5500
+centralValley|GenAmountMaterial|addon||std,Central Valley,General Rehab,Materials,Standard finish,flat,7500
+centralValley|GenAmountMaterial|addon||big,Central Valley,General Rehab,Materials,Big House finish,flat,12500
+centralValley|GenAmountPaint|addon||int,Central Valley,General Rehab,Paint,Interior,sqft,2
+centralValley|GenAmountPaint|addon||ext,Central Valley,General Rehab,Paint,Exterior,sqft,2
+centralValley|GenAmountPaint|addon||texture,Central Valley,General Rehab,Paint,Texture,sqft,1.5
+centralValley|GenAmountPaint|addon||popcorn,Central Valley,General Rehab,Paint,Popcorn ceiling scrape,sqft,1.5
+centralValley|GenAmountMisc|addon||concrete,Central Valley,General Rehab,Miscellaneous,Concrete work,sqft,15
+centralValley|FinAmountAppliance|pick|appl|nofridge,Central Valley,Finishes,Appliances,"All new, no fridge",flat,1850
+centralValley|FinAmountAppliance|pick|appl|fridge,Central Valley,Finishes,Appliances,All new w/ fridge,flat,3500
+centralValley|FinAmountAppliance|pick|appl|r36,Central Valley,Finishes,Appliances,"36"" range w/ fridge",flat,4000
+centralValley|FinAmountAppliance|pick|appl|r48,Central Valley,Finishes,Appliances,"48"" range w/ fridge",flat,5000
+centralValley|FinAmountCleaning|addon||clean,Central Valley,Finishes,Cleaning,Cleaning,flat,500
+centralValley|FinAmountStaging|pick|stage|high,Central Valley,Finishes,Staging,High end,flat,5000
+centralValley|FinAmountStaging|pick|stage|cheap,Central Valley,Finishes,Staging,Cheap,flat,2500
+centralValley|FinAmountStaging|pick|stage|estage,Central Valley,Finishes,Staging,E-stage,flat,550
+centralValley|FinAmountMisc|addon||photos,Central Valley,Finishes,Miscellaneous,Photos,flat,300

@@ -1,0 +1,63 @@
+name: Sync pricing from Google Sheet
+
+# Pulls the published Google Sheet (as CSV), regenerates the app's pricing, and commits
+# to main — which triggers the Pages deploy. Runs on a schedule and can be run on demand
+# from the Actions tab ("Run workflow"). Set the repo variable PRICING_SHEET_CSV_URL to the
+# sheet's "Publish to web → CSV" link; until then the job is a no-op.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *" # hourly (plus the manual button for instant updates)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-pricing
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the Google Sheet as CSV
+        env:
+          URL: ${{ vars.PRICING_SHEET_CSV_URL }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "PRICING_SHEET_CSV_URL is not set — nothing to sync. See docs/PRICING.md."
+            echo "skip=1" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          curl -fsSL "$URL" -o pricing/prices.csv
+          # sanity-check the download actually looks like our CSV (not an error/login page)
+          if ! head -1 pricing/prices.csv | grep -qi 'key' || ! head -1 pricing/prices.csv | grep -qi 'price'; then
+            echo "::error::Downloaded file is not the expected pricing CSV (missing key/price header)."
+            echo "First line was: $(head -1 pricing/prices.csv)"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        if: env.skip != '1'
+        with:
+          node-version: "20"
+
+      - name: Regenerate pricing into the app
+        if: env.skip != '1'
+        run: node scripts/build-pricing.mjs
+
+      - name: Commit if anything changed
+        if: env.skip != '1'
+        run: |
+          git config user.name "pricing-sync[bot]"
+          git config user.email "pricing-sync@users.noreply.github.com"
+          git add pricing/prices.csv pricing/pricing.json index.html
+          if git diff --cached --quiet; then
+            echo "No pricing changes."
+          else
+            git commit -m "Sync pricing from Google Sheet"
+            git push
+            echo "Pushed updated pricing."
+          fi

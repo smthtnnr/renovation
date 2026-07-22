@@ -4,11 +4,15 @@ A single-page, installable web app for property managers to build a renovation
 budget on a phone or desktop and export it into the standard **Budget Template
 PDF**. Works fully offline once installed.
 
-- **`index.html`** — the entire app (UI + pricing model + PDF filling).
+- **`index.html`** — the entire app (UI + pricing model + PDF filling). The pricing
+  `REGIONS` block is **generated** (between `PRICING:START`/`PRICING:END`) — don't hand-edit it.
+- **`pricing/pricing.json`, `pricing/prices.csv`** — the pricing data (structure + prices).
+- **`scripts/build-pricing.mjs`** — regenerates the `REGIONS` block from that data.
+- **`.github/workflows/sync-pricing.yml`** — hourly sync from the Google Sheet → see [`docs/PRICING.md`](docs/PRICING.md).
 - **`vendor/pdf-lib.min.js`** — bundled PDF library (so export works offline).
 - **`manifest.webmanifest`, `sw.js`, `icons/`** — make it installable as an app.
 - **`Budget_Template.pdf`** — the fillable PDF the app populates (embedded in `index.html` as base64; this copy is kept for reference).
-- **`docs/BAY_PRICING_SHEET.xlsx`** — the source-of-truth pricing sheet.
+- **`docs/*.xlsx`** — legacy reference pricing sheets (no longer wired to the app).
 
 ---
 
@@ -28,11 +32,24 @@ internal web server). On a phone, open the URL and choose **Add to Home Screen**
 
 ---
 
-## Updating prices / adding options
+## Updating prices
 
-All pricing lives in one place in `index.html`: the **`REGIONS`** object
-(search for `const REGIONS = {`). Each system is one row that maps to one PDF
-amount field. The three kinds of priced inputs:
+**Prices are edited in a Google Sheet, not in code.** An hourly GitHub Action pulls the
+sheet, regenerates the app, and redeploys. See **[`docs/PRICING.md`](docs/PRICING.md)** for
+the one-time setup and day-to-day flow.
+
+- `pricing/pricing.json` — canonical pricing model (structure + prices).
+- `pricing/prices.csv` — the flat price list mirrored from the Sheet.
+- `scripts/build-pricing.mjs` — overlays the CSV prices and regenerates the `REGIONS`
+  block in `index.html` (between the `PRICING:START` / `PRICING:END` markers). **Don't edit
+  that block by hand — it's generated.**
+- `.github/workflows/sync-pricing.yml` — the hourly / on-demand sync.
+
+## Adding / changing options (structure)
+
+Adding an option, renaming a label, or changing quantity/PDF wiring is a structural change:
+edit `pricing/pricing.json`, then run `node scripts/build-pricing.mjs` to rebuild
+`index.html`. Each system maps to one PDF amount field. The kinds of priced inputs:
 
 | Field | Meaning | Example |
 |------|---------|---------|
@@ -41,14 +58,7 @@ amount field. The three kinds of priced inputs:
 | `lineItems: true` | free-form description + $ rows | Framing/Drywall |
 | `manual: true` | a single free-form $ box | Foundation |
 
-**Change a price:** edit the `price:` value on that option.
-
-```js
-{id:"tearoff", label:"Tearoff", price:750, q:"roofSquares"},
-//                                    ^^^ edit this
-```
-
-**Add an option:** copy a sibling line and edit it. Key fields:
+**Add an option:** copy a sibling entry in `pricing/pricing.json`. Key fields:
 
 - `id` — unique within that system (any short string).
 - `label` — what the user sees.
@@ -59,36 +69,42 @@ amount field. The three kinds of priced inputs:
 - `def: true` — checked / selected by default (addons & picks).
 - For inline-qty addons: add `inline:true, qlabel:"baths"`.
 
+Then run `node scripts/build-pricing.mjs` to regenerate `index.html`, and
+`node scripts/build-pricing.mjs --seed` to refresh `pricing/prices.csv` (re-import it into
+the Sheet so the new option shows up there too).
+
 > Quantities like `q:"sqft"` come from the **Property & Quantities** inputs at
 > the top of the app, entered once per property.
 
-After editing pricing assets, bump the cache version in `sw.js`
-(`reno-budget-v1` → `-v2`) so installed apps pull the update.
+> The `sw.js` cache name is stamped with the commit SHA at deploy time, so every release
+> busts old caches automatically — no manual version bump needed.
 
 ---
 
 ## Adding a region (later)
 
 Pricing is keyed by region. To add one, copy the entire `bayArea` block inside
-`REGIONS`, give it a new key and `label`, and adjust prices:
+`pricing/pricing.json`, give it a new key and `label`, adjust prices, then run
+`node scripts/build-pricing.mjs`:
 
-```js
-const REGIONS = {
-  bayArea:  { label: "Bay Area",  systems: [ /* ... */ ] },
-  sacramento:{ label: "Sacramento", systems: [ /* ... */ ] }   // new
-};
+```json
+{
+  "bayArea":     { "label": "Bay Area",     "systems": [ ... ] },
+  "sacramento":  { "label": "Sacramento",   "systems": [ ... ] }
+}
 ```
 
-The **Pricing region** dropdown at the top of the page lists every region in
-`REGIONS` automatically — no other code changes needed.
+The **Pricing region** dropdown at the top of the page lists every region
+automatically — no other code changes needed.
 
 ---
 
-## Keeping pricing in sync with the spreadsheet
+## Legacy pricing spreadsheets
 
-`docs/BAY_PRICING_SHEET.xlsx` (tab **Sheet2**) is the authoritative pricing.
-The app's `REGIONS.bayArea` mirrors it. When the sheet changes, update the
-matching `price:`/options in `index.html` and bump the `sw.js` cache version.
+`docs/BAY_PRICING_SHEET.xlsx` and `docs/CENTRAL_VALLEY_PRICING_SHEET.xlsx` were the
+original hand-maintained reference sheets. They are **no longer wired to the app** — the
+live source is now the Google Sheet described in [`docs/PRICING.md`](docs/PRICING.md). They
+are kept for historical reference only.
 
 ---
 
