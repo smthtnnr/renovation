@@ -11,8 +11,8 @@ bayArea|MajAmountHvac|pick|hvac|furnace,Bay Area,Major Systems,HVAC,Furnace,flat
 bayArea|MajAmountHvac|pick|hvac|wall,Bay Area,Major Systems,HVAC,Wall heater,flat,2000
 bayArea|MajAmountHvac|pick|hvac|duct,Bay Area,Major Systems,HVAC,Duct work,flat,2500
 bayArea|MajAmountHvac|pick|hvac|allnew,Bay Area,Major Systems,HVAC,All new,flat,10000
-bayArea|MajAmountElectricalPanel|addon||panel100,Bay Area,Major Systems,Electrical Panel / System,New panel — 100A,flat,4000
-bayArea|MajAmountElectricalPanel|addon||panel200,Bay Area,Major Systems,Electrical Panel / System,New panel — 200A,flat,5000
+bayArea|MajAmountElectricalPanel|addon||panel100,Bay Area,Major Systems,Electrical Panel / System,New panel â€” 100A,flat,4000
+bayArea|MajAmountElectricalPanel|addon||panel200,Bay Area,Major Systems,Electrical Panel / System,New panel â€” 200A,flat,5000
 bayArea|MajAmountWaterHeater|addon||replace,Bay Area,Major Systems,Water Heater,Replace,flat,1500
 bayArea|MajAmountWindow|addon||win,Bay Area,Major Systems,Windows,Windows,windows,750
 bayArea|MajAmountWindow|addon||slider,Bay Area,Major Systems,Windows,Sliders,sliders,1500
@@ -75,8 +75,8 @@ centralValley|MajAmountHvac|pick|hvac|cond3,Central Valley,Major Systems,HVAC,3 
 centralValley|MajAmountHvac|pick|hvac|furnace,Central Valley,Major Systems,HVAC,Furnace,flat,3500
 centralValley|MajAmountHvac|pick|hvac|duct,Central Valley,Major Systems,HVAC,Duct work,flat,2500
 centralValley|MajAmountHvac|pick|hvac|allnew,Central Valley,Major Systems,HVAC,All new,flat,10000
-centralValley|MajAmountElectricalPanel|addon||panel100,Central Valley,Major Systems,Electrical Panel / System,New panel — 100A,flat,3000
-centralValley|MajAmountElectricalPanel|addon||panel200,Central Valley,Major Systems,Electrical Panel / System,New panel — 200A,flat,3750
+centralValley|MajAmountElectricalPanel|addon||panel100,Central Valley,Major Systems,Electrical Panel / System,New panel â€” 100A,flat,3000
+centralValley|MajAmountElectricalPanel|addon||panel200,Central Valley,Major Systems,Electrical Panel / System,New panel â€” 200A,flat,3750
 centralValley|MajAmountWaterHeater|addon||replace,Central Valley,Major Systems,Water Heater,Replace,flat,1500
 centralValley|MajAmountWindow|addon||win,Central Valley,Major Systems,Windows,Windows,windows,500
 centralValley|MajAmountWindow|addon||slider,Central Valley,Major Systems,Windows,Sliders,sliders,1000
