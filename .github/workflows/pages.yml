@@ -26,6 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          # (Re-)enables GitHub Pages for the repo if it's been turned off,
+          # so a deploy run is all it takes to bring the site back.
+          enablement: true
       - name: Assemble site (app files only)
         run: |
           mkdir -p _site
