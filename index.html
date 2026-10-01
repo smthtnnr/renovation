@@ -192,6 +192,7 @@ const PROPS = [
   {k:"sqft", label:"Living sq ft", type:"num"},
   {k:"beds", label:"Bedrooms", type:"num"},
   {k:"baths", label:"Bathrooms", type:"num"},
+  {k:"lotSqft", label:"Lot sq ft", type:"num"},
   {k:"intDoors", label:"Interior doors", type:"num"},
   {k:"frontDoors", label:"Front doors", type:"num", def:1},
   {k:"windows", label:"Windows", type:"num"},
@@ -360,7 +361,7 @@ function computeSystem(s){
       const o = g.opts.find(x=>x.id===sel);
       const q = qty(o.q); const line = o.price*q;
       total += line;
-      parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${UNIT_LABEL[o.q]||""}`);
+      parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${UNIT_LABEL[o.q]||""}${o.q==="sqft"?` @ ${unitPrice(o.price)}/sf`:""}`);
     }
   });
   // addon checkboxes
@@ -368,7 +369,7 @@ function computeSystem(s){
     if(st.addons[o.id]){
       const q = o.inline ? inlineQty(st,o) : qty(o.q); const line = o.price*q;
       total += line;
-      if(line>0) parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${o.inline ? (o.qlabel?" "+o.qlabel:"") : (UNIT_LABEL[o.q]||"")}`);
+      if(line>0) parts.push(o.q==="flat" ? o.label : `${o.label} ${q}${o.inline ? (o.qlabel?" "+o.qlabel:"") : (UNIT_LABEL[o.q]||"")}${o.q==="sqft"?` @ ${unitPrice(o.price)}/sf`:""}`);
       else if(o.q!=="flat") parts.push(`${o.label} (0)`);
     }
   });
@@ -624,6 +625,25 @@ document.getElementById("pdfBtn").addEventListener("click", async ()=>{
     setText("PropertyAddress", prop.address||"");
     setText("VendorName", prop.vendor||"");
     setText("PropertyId", prop.propId||"");
+
+    // Property snapshot (beds/baths, living sqft, lot, garage) drawn into the header, in the
+    // clear strip above the Vendor field (x 251-429 at y~769 sits between the Vendor and
+    // Property ID boxes without touching either, or the address block to the right).
+    try{
+      const num=k=>parseFloat(prop[k])||0;
+      const facts=[];
+      if(num("beds")||num("baths")) facts.push(`${num("beds")} bd / ${num("baths")} ba`);
+      if(num("sqft")) facts.push(num("sqft").toLocaleString("en-US")+" sf living");
+      if(num("lotSqft")) facts.push(num("lotSqft").toLocaleString("en-US")+" sf lot");
+      if(num("garages")) facts.push("Garage: "+num("garages"));
+      if(facts.length){
+        const page=pdfDoc.getPages()[0];
+        const font=await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        const text=facts.join("  ·  ");
+        let size=8; while(size>5.5 && font.widthOfTextAtSize(text,size)>178) size-=0.25;
+        page.drawText(text,{x:251,y:769,size,font,color:PDFLib.rgb(0.15,0.15,0.15)});
+      }
+    }catch(e){}
 
     // The template only prepends "$" on the subtotal/total fields; give the per-system amount
     // fields the same currency format so a cell a user edits in a viewer also shows $1,500.00.
